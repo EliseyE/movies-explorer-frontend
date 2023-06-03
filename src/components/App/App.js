@@ -1,9 +1,17 @@
 import React from 'react';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import './App.css';
+
+import Main from '../Main/Main';
+import Footer from '../Footer/Footer';
 
 function App() {
 
   return(
-    <h1>Diploma project</h1>
+    <div className='page'>
+      <Main />
+      <Footer />
+    </div>
   );
 }
 
