@@ -1,0 +1,40 @@
+.user-entry-menu {
+  display: flex;
+  width: fit-content;
+  height: fit-content;
+  display: flex;
+  gap: 30px;
+}
+
+.user-entry-menu__link {
+  align-self: center;
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  width: fit-content;
+  height: fit-content;
+  color: #fff;
+  text-decoration: none;
+  transition: opacity .25s;
+}
+
+.user-entry-menu__link:hover {
+  opacity: 0.7;
+}
+
+@media screen and (max-width: 320px) {
+  .user-entry-menu {
+    gap: 14px;
+  }
+
+  .user-entry-menu__link {
+    font-size: 10px;
+  }
+
+  .user-entry-menu__signin-button {
+    padding: 5px 12px;
+    font-size: 10px;
+  }
+}

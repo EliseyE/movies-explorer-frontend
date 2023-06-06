@@ -4,9 +4,9 @@ import './Header.css';
 function Header() {
 
   return(
-    <Header className='Header'>
+    <div className='Header'>
 
-    </Header>
+    </div>
   );
 }
 

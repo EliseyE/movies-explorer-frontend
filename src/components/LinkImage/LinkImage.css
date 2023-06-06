@@ -1,0 +1,8 @@
+.link-image{
+  font-size: 0;
+}
+
+.link-image__image {
+  padding: 0;
+  text-decoration: none;
+}

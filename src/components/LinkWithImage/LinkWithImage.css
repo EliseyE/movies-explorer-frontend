@@ -1,0 +1,36 @@
+.link-with-image {
+  color: #000;
+  font-family: 'Inter', Arial, sans-serif;
+  display: flex;
+  gap: 17px;
+}
+
+.link-with-image__link {
+  align-self: center;
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16px;
+  width: fit-content;
+  height: fit-content;
+  color: #000;
+  text-decoration: none;
+  transition: opacity .25s;
+}
+
+.link-with-image__link:hover {
+  opacity: 0.7;
+}
+
+.link-with-image__image {
+  width: 26px;
+  height: 30px;
+  padding:  8px 7.25px;
+  background-position: center;
+  background-size:auto;
+  background-repeat: no-repeat;
+  background-color: #F9F9F9;
+  border-radius: 4px;
+  box-sizing: border-box;
+}

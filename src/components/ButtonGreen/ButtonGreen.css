@@ -1,0 +1,15 @@
+.button-green {
+  background-color: rgba(43, 224, 128, 1);
+  border: 0;
+}
+
+.button-green:hover {
+  background-color: rgba(43, 224, 128, 0.8);
+}
+
+@media screen and (max-width: 540px) {
+  .button-green {
+    padding: 5px 12px;
+    font-size: 10px;
+  }
+}

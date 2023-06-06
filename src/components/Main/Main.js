@@ -4,8 +4,9 @@ import './Main.css';
 function Main() {
 
   return(
-    <h1>MAIN</h1>
+    <div className='main'>
+
+    </div>
   );
 }
-
 export default Main;
