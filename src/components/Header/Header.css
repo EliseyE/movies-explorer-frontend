@@ -15,7 +15,6 @@
   width: 100vw;
   height: calc(100% + 2px);
   z-index: -1;
-  overflow: hidden;
 }
 
 .header__logo {
@@ -32,6 +31,10 @@
 }
 
 @media screen and (max-width: 768px) {
+  .header {
+    margin: 0 -20px;
+  }
+
   .navigation_place_header {
     visibility: hidden;
   }
@@ -42,6 +45,12 @@
 
   .header__account {
     visibility: hidden;
+  }
+}
+
+@media screen and (max-width: 540px) {
+  .header {
+    margin: 0;
   }
 }
 

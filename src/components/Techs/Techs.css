@@ -41,18 +41,12 @@
 }
 
 .techs__collection {
-  /* width: 700px; */
   margin: 0;
   padding: 0;
   list-style-type: none;
-
-  /* display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap; */
-
   display: inline-grid;
   grid-template-columns: repeat(7, auto);
-  column-gap: 10px;
+  gap: 10px;
 }
 
 .techs__collection-item {

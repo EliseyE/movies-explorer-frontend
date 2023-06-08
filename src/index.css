@@ -3,7 +3,7 @@
 @import url('./vendor/fonts/fonts.css');
 
 .root {
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 /* TEMP styles*/
