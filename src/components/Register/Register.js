@@ -1,13 +1,12 @@
 import React from 'react';
-import './Header.css';
+import './Register.css';
 
-function Header() {
+function Register() {
 
   return(
-    <div className='Header'>
+    <div className='register'>
 
     </div>
   );
 }
-
-export default Header;
+export default Register;

@@ -7,15 +7,11 @@ import LinkWithImageAccount from '../LinkWithImageAccount/LinkWithImageAccount';
 import ButtonThreeLines from '../ButtonThreeLines/ButtonThreeLines';
 import { NAVIGATION_ITEMS_HEADER } from '../../appConfig';
 
-
-const isLoggedIn = false;
-
-
-function Header() {
+function Header({isLoggedIn=false}) {
 
   return(
     <header className='header'>
-      {!isLoggedIn && <div className='header__back' ></div>}
+      {!isLoggedIn && <div className='header__back' />}
       <LinkImageLogo linkImageMod='header__logo'/>
       {isLoggedIn &&
         <Navigation menuArray={NAVIGATION_ITEMS_HEADER} navigationNavMod='navigation_place_header'/>}

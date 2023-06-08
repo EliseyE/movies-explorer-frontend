@@ -1,3 +1,127 @@
 .techs {
-
+  position: relative;
+  padding: 100px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
+
+.techs__title {
+  margin-bottom: 90px;
+}
+
+.techs__back {
+  padding: 0 70px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  background-color: #F5F5F5;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.techs__ph1 {
+  width: 600px;
+  margin: 0 0 26px 0;
+  padding: 0;
+  font-size: 50px;
+  line-height: 58px;
+  letter-spacing: -0.04em;
+}
+
+.techs__ph2 {
+  margin: 0 0 100px 0;
+  padding: 0;
+  width: 460px;
+  letter-spacing: -0.04em;
+}
+
+.techs__collection {
+  /* width: 700px; */
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+
+  /* display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap; */
+
+  display: inline-grid;
+  grid-template-columns: repeat(7, auto);
+  column-gap: 10px;
+}
+
+.techs__collection-item {
+  line-height: 60px;
+  text-align: center;
+  vertical-align: middle;
+  letter-spacing: -0.04em;
+
+  width: 90px;
+  height: 60px;
+  background-color: #E8E8E8;
+  border-radius: 10px;
+}
+
+@media screen and (max-width: 860px) {
+  .techs {
+    padding: 90px 0;
+  }
+
+  .techs__title {
+    margin-bottom: 80px;
+  }
+
+  .techs__ph1 {
+    margin-bottom: 22px;
+  }
+
+  .techs__ph2 {
+    margin-bottom: 83px;
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  .techs__collection-item {
+    line-height: 57px;
+    font-size: 12px;
+
+    width: 84px;
+    height: 57px;
+  }
+}
+
+@media screen and (max-width: 686px) {
+  .techs {
+    padding: 70px 4px;
+  }
+
+  .techs__title {
+    margin-bottom: 60px;
+  }
+
+  .techs__ph1 {
+    font-size: 30px;
+    line-height: 36px;
+    margin-bottom: 24px;
+  }
+
+  .techs__ph2 {
+    width: 100%;
+    margin-bottom: 50px;
+    font-size: 11px;
+    line-height: 16px;
+  }
+
+  .techs__collection {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    grid-template-rows: repeat(4, auto);
+    gap: 10px;
+  }
+}
+
