@@ -12,29 +12,31 @@ import {
 import ArticlePage from '../ArticlePage/ArticlePage';
 import { Link } from 'react-router-dom'
 
-function AboutMe() {
+function AboutMe({ aboutMeMod='' }) {
 
   return(
-    <ArticlePage articlePageMod='about-me' articleName={ABOUT_ME_TITLE}>
-      <div className='about-me__container'>
-        <div className='about-me__info'>
-          <h3 className='about-me__name'>{ABOUT_ME_NAME}</h3>
-          <p className='about-me__brief'>{ABOUT_ME_BRIEF}</p>
-          <p className='about-me__biografy'>{ABOUT_ME_BIOGRAFY}</p>
-          <nav>
-            <Link
-              className='about-me__link'
-              target='_blank'
-              to={ABOUT_ME_GIT_LINK} >{ABOUT_ME_GIT_LINK_TEXT}</Link>
-          </nav>
-        </div>
-        <img
-          className='about-me__photo'
-          src={ABOUT_ME_PHOTO}
-          alt={`Фотография ${ABOUT_ME_NAME}`}
-        />
-        </div>
-    </ArticlePage>
+    <section className={`about-me ${aboutMeMod}`}>
+      <ArticlePage articlePageMod='about-me' articleName={ABOUT_ME_TITLE}>
+        <div className='about-me__container'>
+          <div className='about-me__info'>
+            <h3 className='about-me__name'>{ABOUT_ME_NAME}</h3>
+            <p className='about-me__brief'>{ABOUT_ME_BRIEF}</p>
+            <p className='about-me__biografy'>{ABOUT_ME_BIOGRAFY}</p>
+            <nav>
+              <Link
+                className='about-me__link'
+                target='_blank'
+                to={ABOUT_ME_GIT_LINK} >{ABOUT_ME_GIT_LINK_TEXT}</Link>
+            </nav>
+          </div>
+          <img
+            className='about-me__photo'
+            src={ABOUT_ME_PHOTO}
+            alt={`Фотография ${ABOUT_ME_NAME}`}
+          />
+          </div>
+      </ArticlePage>
+    </section>
   );
 }
 

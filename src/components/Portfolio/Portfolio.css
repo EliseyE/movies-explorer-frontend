@@ -1,5 +1,4 @@
 .portfolio {
-  margin-bottom: 107px;
   font-family: 'Inter';
   font-style: normal;
   font-weight: 400;
@@ -9,6 +8,7 @@
   justify-content: space-between;
   gap: 50px;
   width: 100%;
+  box-sizing: border-box;
 }
 
 .portfolio__title {
@@ -44,7 +44,7 @@
   letter-spacing: -0.04em;
   color: #000;
   text-decoration: none;
-  transition: .25s;
+  transition: opacity .25s;
 }
 
 .portfolio__link:hover {
@@ -57,7 +57,6 @@
   font-size: 30px;
   line-height: 45px;
   letter-spacing: -0.04em;
-  vertical-align:baseline;
 }
 
 .portfolio__nav-item:last-child {
@@ -65,10 +64,6 @@
 }
 
 @media screen and (max-width: 768px) {
-  .portfolio {
-    margin-bottom: 72px;
-  }
-
   .portfolio__link {
     font-size: 28px;
     line-height: 50px;
@@ -81,7 +76,6 @@
 
 @media screen and (max-width: 686px) {
   .portfolio {
-    margin-bottom: 52px;
     gap: 40px;
   }
 

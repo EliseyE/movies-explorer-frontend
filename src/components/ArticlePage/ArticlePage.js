@@ -10,10 +10,10 @@ function ArticlePage({
   }) {
 
   return(
-    <section className={`article-page ${articlePageMod}`}>
+    <div className={`article-page ${articlePageMod}`}>
       <h2 id={articlePageId} className={`article-page__title ${articlePageTitleMod}`}>{articleName}</h2>
       {children}
-    </section>
+    </div>
   );
 }
 

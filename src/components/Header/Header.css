@@ -2,19 +2,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: relative;
 }
 
-.header__back {
-  position: absolute;
-  top: calc(50% + 1px);
-  left: 50%;
-  margin-right: -50%;
-  transform: translate(-50%, -50%);
+.header_color_blue {
   background-color: #073042;
-  width: 100vw;
-  height: calc(100% + 2px);
-  z-index: -1;
 }
 
 .header__logo {
@@ -31,10 +22,6 @@
 }
 
 @media screen and (max-width: 768px) {
-  .header {
-    margin: 0 -20px;
-  }
-
   .navigation_place_header {
     visibility: hidden;
   }
@@ -45,12 +32,6 @@
 
   .header__account {
     visibility: hidden;
-  }
-}
-
-@media screen and (max-width: 540px) {
-  .header {
-    margin: 0;
   }
 }
 

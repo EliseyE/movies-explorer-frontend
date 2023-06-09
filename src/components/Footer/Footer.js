@@ -11,10 +11,10 @@ import {
 import { Link } from 'react-router-dom'
 
 
-function Footer() {
+function Footer({footerMod=''}) {
 
   return(
-    <footer className='footer'>
+    <footer className={`footer ${footerMod}`}>
       <h2 className='footer__title'>{FOOTER_TITLE_TEXT}</h2>
 
       <div className='footer__info'>

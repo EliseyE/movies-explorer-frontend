@@ -11,6 +11,14 @@ const ABOUT_ME_BIOGRAFY =
 const ABOUT_ME_GIT_LINK = 'https://github.com/EliseyE';
 const ABOUT_ME_GIT_LINK_TEXT = 'Github';
 
+// import ABOUT_ME_PHOTO from '../../images/student.png'
+// const ABOUT_ME_TITLE = 'Студент';
+// const ABOUT_ME_NAME = 'Виталий';
+// const ABOUT_ME_BRIEF = 'Фронтенд-разработчик, 30 лет';
+// const ABOUT_ME_BIOGRAFY = 'Я родился и живу в Саратове, закончил факультет экономики СГУ. У меня есть жена и дочь. Я люблю слушать музыку, а ещё увлекаюсь бегом. Недавно начал кодить. С 2015 года работал в компании «СКБ Контур». После того, как прошёл курс по веб-разработке, начал заниматься фриланс-заказами и ушёл с постоянной работы.';
+// const ABOUT_ME_GIT_LINK_TEXT = 'Github';
+// const ABOUT_ME_GIT_LINK = 'https://github.com/EliseyE';
+
 export {
   ABOUT_ME_PHOTO,
   ABOUT_ME_TITLE,

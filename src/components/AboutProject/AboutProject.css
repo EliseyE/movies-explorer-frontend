@@ -93,7 +93,7 @@
   }
 
   .collection-points__item {
-    width: 100%;
+    width: calc(100vw*(284/320));
     row-gap: 16px;
   }
 

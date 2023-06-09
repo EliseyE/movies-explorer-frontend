@@ -12,9 +12,9 @@ const isLoggedIn = false;
 
   return(
     <div className='page'>
-      <Header isLoggedIn={isLoggedIn}/>
+      <Header headerMod='header__place_page'/>
       <Main />
-      <Footer />
+      <Footer footerMod='footer__place_page'/>
     </div>
   );
 }

@@ -30,7 +30,7 @@
 
 @media screen and (max-width: 686px) {
   .article-page {
-    padding: 70px 4px;
+    padding: 70px 0;
     box-sizing: border-box;
   }
 

@@ -10,11 +10,11 @@ function Main() {
 
   return(
     <main className='content'>
-      <Promo />
-      <AboutProject />
-      <Techs />
-      <AboutMe />
-      <Portfolio />
+      <Promo promoMod='promo__place_content'/>
+      <AboutProject aboutProjectMod='about-project_place_content' />
+      <Techs techsMod='techs_place_content' />
+      <AboutMe aboutMeMod='about-me_place_content' />
+      <Portfolio portfolioMod='portfolio_place_content' />
     </main>
   );
 }

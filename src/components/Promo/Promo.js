@@ -6,11 +6,10 @@ import {
 } from './constants.js';
 import NavTab from '../NavTab/NavTab';
 
-function Promo() {
+function Promo({promoMod=''}) {
 
   return(
-    <section className='promo'>
-      <div className='promo__back' />
+    <section className={`promo ${promoMod}`}>
       <div className='promo__info'>
         <h1 className='promo__title'>{PROMO_TITLE_TEXT}</h1>
         <p className='promo__text'>{PROMO_TEXT}</p>

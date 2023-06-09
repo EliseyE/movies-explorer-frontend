@@ -7,10 +7,10 @@ import {
 } from './constants'
 import { Link } from 'react-router-dom'
 
-function Portfolio() {
+function Portfolio({ portfolioMod='' }) {
 
   return(
-    <section className='portfolio'>
+    <section className={`portfolio ${portfolioMod}`}>
       <h2 className='portfolio__title'>{PORTFOLIO__TITLE}</h2>
       <nav className='portfolio__nav'>
       {PORTFOLIO_LINKS_LIST.map((item, index) => (

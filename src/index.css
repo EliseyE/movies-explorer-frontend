@@ -2,10 +2,6 @@
 @import url('./vendor/normalize.css');
 @import url('./vendor/fonts/fonts.css');
 
-.root {
-  /* overflow: hidden; */
-}
-
 /* TEMP styles*/
 
 /* * {
@@ -15,4 +11,3 @@
 .page {
   outline: 3px dashed rgba(240, 227, 227, 0.815);
 } */
-

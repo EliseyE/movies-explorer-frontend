@@ -2,18 +2,39 @@
   max-width: 1280px;
   min-width: 320px;
   margin: 0 auto;
-  padding: 0 70px;
+}
+
+.header__place_page {
   box-sizing: border-box;
+  padding-left: 70px;
+  padding-right: 70px;
+}
+
+.footer__place_page {
+  margin-left: 70px;
+  margin-right: 70px;
 }
 
 @media screen and (max-width: 1024px) {
-  .page {
-    padding: 0 50px;
+  .header__place_page {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+
+  .footer__place_page {
+    margin-left: 30px;
+    margin-right: 30px;
   }
 }
 
 @media screen and (max-width: 540px) {
-  .page {
-    padding: 0 14px;
+  .header__place_page {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .footer__place_page {
+    margin-left: 10px;
+    margin-right: 10px;
   }
 }
