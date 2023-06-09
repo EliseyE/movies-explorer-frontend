@@ -5,17 +5,20 @@ import './App.css';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Footer from '../Footer/Footer';
+import NotFoundPage from '../NotFoundPage/NotFoundPage';
 
 function App() {
 
 const isLoggedIn = false;
 
   return(
-    <div className='page'>
-      <Header headerMod='header__place_page'/>
-      <Main />
-      <Footer footerMod='footer__place_page'/>
-    </div>
+    // <div className='page'>
+    //   <Header headerMod='header__place_page'/>
+    //   <Main />
+    //   <Footer footerMod='footer__place_page'/>
+    // </div>
+
+    <NotFoundPage />
   );
 }
 

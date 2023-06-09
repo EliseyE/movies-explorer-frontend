@@ -7,7 +7,7 @@
 
 .link-with-image__link {
   align-self: center;
-  font-family: 'Inter';
+  font-family: 'Inter', Arial, sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
