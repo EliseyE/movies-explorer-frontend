@@ -1,4 +1,4 @@
-.button-with-image {
+.button-img {
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
@@ -12,6 +12,6 @@
   transition: opacity .25s;
 }
 
-.button-with-image:hover {
+.button-img:hover {
   opacity: .7;
 }

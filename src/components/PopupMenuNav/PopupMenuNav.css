@@ -1,0 +1,24 @@
+.popup-menu-nav {
+  width: calc(100vw*(520/768));
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 159px;
+  padding-bottom: 92px;
+  box-sizing: border-box;
+  background-color: #fff;
+}
+
+.popup.popup__position_right {
+  justify-content: flex-end;
+}
+
+@media screen and (max-width: 650px) {
+  .popup-menu-nav {
+    width: 100vw;
+    padding-top: 144px;
+    padding-bottom: 48px;
+  }
+}

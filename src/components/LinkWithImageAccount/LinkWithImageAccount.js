@@ -15,7 +15,7 @@ function LinkWithImageAccount({link, linkText, linkWithImageMod, imageMod, linkM
       linkText={linkText || LINK_WITH_IMAGE_NAME}
       linkWithImageMod={linkWithImageMod || ''}
       imagePath={imagePath || ''}
-      imageMod={imageMod || 'account-image'}
+      imageMod={imageMod || ''}
       linkMod={linkMod || ''}
       onClick={onClick || undefined}
     />
