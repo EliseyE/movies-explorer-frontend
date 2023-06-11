@@ -1,10 +1,11 @@
 import React from "react";
+import './Preloader.css';
 
-function Preloader() {
+function Preloader({ preloaderMod='', preloaderWheelMod='' }) {
 
   return(
-    <div className="preloader">
-      <div className="preloader__wheel" />
+    <div className={`preloader ${preloaderMod}`}>
+      <div className={`preloader__wheel ${preloaderWheelMod}`} />
     </div>
   );
 }

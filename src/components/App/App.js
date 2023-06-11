@@ -7,6 +7,9 @@ import Main from '../Main/Main';
 import Footer from '../Footer/Footer';
 import NotFoundPage from '../NotFoundPage/NotFoundPage';
 import PopupMenuNav from '../PopupMenuNav/PopupMenuNav';
+import SearchForm from '../SearchForm/SearchForm';
+import Movies from '../Movies/Movies';
+
 
 
 function App() {
@@ -47,18 +50,21 @@ function App() {
     <>
       <div className='page'>
         <Header headerMod='header__place_page' buttonMenuNavClick={handleMenuNavClick} isLoggedIn={isLoggedIn} />
-        <Main />
+        <Movies />
+        {/* <Main /> */}
         <Footer footerMod='footer__place_page'/>
       </div>
-      <PopupMenuNav
-        isOpen={isMenuNavOpen}
-        onClose={closeAllPopups}
-      />
+
 
     <Routes>
     {/* <Route path={['/', '/1']} element={isLoggedIn ? <Navigate to="/" replace /> : <Navigate to="/sign-in" replace />} /> */}
      <Route path='/404' element={<NotFoundPage />} />
     </Routes>
+
+    <PopupMenuNav
+      isOpen={isMenuNavOpen}
+      onClose={closeAllPopups}
+    />
   </>
   );
 }

@@ -1,0 +1,18 @@
+.button-blue-ellipse {
+  background-color: rgba(52, 86, 243, 1);
+  border: 0;
+  font-size: 11px;
+  line-height: 18px;
+  color: #fff;
+  border-radius: 48px;
+  padding-left: 13px;
+  padding-right: 13px;
+}
+
+.button-blue-ellipse:hover {
+  background-color: rgba(52, 86, 243, 0.8);
+}
+
+.button:active {
+  background-color: rgba(52, 86, 243, 0.5);
+}

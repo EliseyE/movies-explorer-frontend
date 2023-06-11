@@ -15,9 +15,13 @@
   height: fit-content;
   cursor: pointer;
 
-  transition: .25s;
+  transition: .15s;
 }
 
 .button:hover {
   background-color: rgba(255, 255, 255, 0.8);
   }
+
+.button:active {
+  background-color: rgba(255, 255, 255, 0.5);
+}

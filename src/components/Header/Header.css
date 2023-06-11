@@ -22,22 +22,24 @@
 }
 
 @media screen and (max-width: 768px) {
-  .navigation_place_header {
+  .navigation.navigation_place_header {
     visibility: hidden;
+    display: none;
   }
 
   .header__button-options {
     display: block;
   }
 
-  .header__account {
+  .link-with-image.header__account {
     visibility: hidden;
+    display: none;
   }
 }
 
 @media screen and (max-width: 320px) {
-  .header__button-options {
-    width: 40px;
+  .button-img.header__button-options {
+    width: 36px;
     height: 43px;
   }
 
