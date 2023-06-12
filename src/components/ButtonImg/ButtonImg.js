@@ -1,7 +1,7 @@
 import React from 'react';
 import './ButtonImg.css';
 
-function ButtonImg({imagePath = '', onClick=undefined, buttonImgMod='', type}) {
+function ButtonImg({imagePath = '', onClick, buttonImgMod='', type}) {
 
   return(
     <button

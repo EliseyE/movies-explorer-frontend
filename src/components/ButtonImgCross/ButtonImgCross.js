@@ -6,12 +6,12 @@ import {
 }
 from './constants'
 
-function ButtonImgCross({ buttonImgCrossMod='', onClick }) {
+function ButtonImgCross({ buttonImgCrossMod, onClick }) {
 
   return(
     <ButtonImg
       imagePath={IMAGE_CROSS_PATH}
-      buttonImgMod={buttonImgCrossMod}
+      buttonImgMod={`button-img-cross ${buttonImgCrossMod}`}
       onClick={onClick}
     />
   );

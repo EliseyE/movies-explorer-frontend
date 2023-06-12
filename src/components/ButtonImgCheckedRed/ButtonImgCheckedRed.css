@@ -1,0 +1,8 @@
+.button-img-checked-red {
+  border-radius: 50%;
+  width: 21px;
+  height: 21px;
+  background-size: cover;
+  border-color: #FF3055;
+  border: 0;
+}

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './Movies.css';
 import SearchForm from '../SearchForm/SearchForm';
 import Preloader from '../Preloader/Preloader';
+import MoviesCard from '../MoviesCard/MoviesCard';
+import { singleMovie } from '../../utils/data'
 
 function Movies() {
   const [isLoading, setIsLoading] = useState(false);
@@ -29,6 +31,7 @@ function Movies() {
         searchMovies={handleSearchMovies}
         formMod='search-form__place_movies'
       />
+      <MoviesCard movie={singleMovie} />
       {isLoading && <Preloader preloaderWheelMod='preloader__wheel_place_movies' /> }
     </section>
   );

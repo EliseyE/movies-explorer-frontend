@@ -9,6 +9,10 @@
   transition: background-color 0.2s ease;
 }
 
+.toggle-switch:hover {
+  background-color: rgba(52, 86, 243, 1);
+}
+
 .toggle-switch__slider {
   position: absolute;
   top: 2px;

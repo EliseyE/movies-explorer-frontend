@@ -1,17 +1,17 @@
 import React from 'react';
 import Button from '../Button/Button';
-import './ButtonBlueEllipse.css';
+import './ButtonGreyEllipse.css';
 
-function ButtonBlueEllipse({
+function ButtonGreyEllipse({
   buttonMod ='',
   buttonType='',
-  onClick=undefined,
+  onClick,
   text
 }) {
 
   return(
     <Button
-      buttonMod={`button-blue-ellipse ${buttonMod}`}
+      buttonMod={`button-grey-ellipse ${buttonMod}`}
       buttonType={buttonType}
       onClick={onClick}
       text={text}
@@ -19,4 +19,4 @@ function ButtonBlueEllipse({
   );
 }
 
-export default ButtonBlueEllipse;
+export default ButtonGreyEllipse;

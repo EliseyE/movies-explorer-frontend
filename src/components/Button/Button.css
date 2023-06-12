@@ -14,8 +14,6 @@
   width: fit-content;
   height: fit-content;
   cursor: pointer;
-
-  transition: .15s;
 }
 
 .button:hover {
