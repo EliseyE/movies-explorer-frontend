@@ -1,12 +1,25 @@
 import React from 'react';
 import './MoviesCardList.css';
+import MoviesCard from '../MoviesCard/MoviesCard';
 
-function MoviesCardList() {
+
+
+function MoviesCardList({ cardList=[], onMovieSave, onMovieSavedDelete, moviesCardListMod='' }) {
 
   return(
-    <div className='moviescardlist'>
-
-    </div>
+    <section className={`movies-card-list ${moviesCardListMod}`}>
+      <ul className='movies-card-list__collection'>
+        {
+            cardList.map((movie) => (
+              <MoviesCard
+                key={movie.id}
+                movie={movie}
+                onMovieSave={onMovieSave}
+                onMovieSavedDelete={onMovieSavedDelete}
+            />))
+          }
+        </ul>
+    </section>
   );
 }
 export default MoviesCardList;

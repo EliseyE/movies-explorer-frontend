@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import './Movies.css';
 import SearchForm from '../SearchForm/SearchForm';
 import Preloader from '../Preloader/Preloader';
-import MoviesCard from '../MoviesCard/MoviesCard';
-import { singleMovie } from '../../utils/data'
+import MoviesCardList from '../MoviesCardList/MoviesCardList';
+
+// TEMPORARY DATA
+import { dataArray } from '../../utils/data'
 
 function Movies() {
   const [isLoading, setIsLoading] = useState(false);
@@ -31,7 +33,7 @@ function Movies() {
         searchMovies={handleSearchMovies}
         formMod='search-form__place_movies'
       />
-      <MoviesCard movie={singleMovie} />
+      <MoviesCardList cardList={dataArray} moviesCardListMod='movies-card-list_place_movies' />
       {isLoading && <Preloader preloaderWheelMod='preloader__wheel_place_movies' /> }
     </section>
   );

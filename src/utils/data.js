@@ -5,7 +5,7 @@ import img4 from '../images/data/img4.png';
 import img5 from '../images/data/img5.png';
 import img6 from '../images/data/img6.png';
 import img7 from '../images/data/img7.png';
-import img8 from '../images/data/img8.jpg';
+import img8 from '../images/data/img8.png';
 import img9 from '../images/data/img9.png';
 import img10 from '../images/data/img10.png';
 import img11 from '../images/data/img11.png';
@@ -86,6 +86,27 @@ const dataArray = [
   },
 ];
 
+const dataArraySaved = [
+  {
+    image: { url: img1 },
+    nameRU: '33 слова о дизайне',
+    duration: 77,
+    trailerLink: 'https://www.youtube.com/watch?v=AJznPy_iM4M'
+  },
+  {
+    image: { url: img2 },
+    nameRU: 'Киноальманах «100 лет дизайна»',
+    duration: 77,
+    trailerLink: 'https://www.youtube.com/watch?v=AJznPy_iM4M'
+  },
+  {
+    image: { url: img3 },
+    nameRU: 'В погоне за Бенкси',
+    duration: 77,
+    trailerLink: 'https://www.youtube.com/watch?v=AJznPy_iM4M'
+  },
+];
+
 const singleMovie =    {
   image: { url: img8 },
   nameRU: 'Gimme Danger: История Игги и The Stooges',
@@ -93,4 +114,4 @@ const singleMovie =    {
   trailerLink: 'https://www.youtube.com/watch?v=AJznPy_iM4M'
 };
 
-export { dataArray, singleMovie };
+export { dataArray, singleMovie, dataArraySaved };

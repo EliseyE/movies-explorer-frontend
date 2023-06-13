@@ -12,16 +12,18 @@ function MoviesCard({ movie, onMovieSave, onMovieSavedDelete, moviesCardTypeSave
   function handleSaveClick() {
     // onMovieSave(movie);
     setIsMovieSaved(true);
+    console.log('Saved');
   }
 
   function handleDeleteClick() {
     // onMovieSavedDelete(movie);
     setIsMovieSaved(false);
+    console.log('Delete from saved');
   }
 
   return(
     <li className='movies-card'>
-      <div className='overlay'>
+      <div className='movies-card__overlay'>
       <div className='movies-card__buttons-container'>
         { !moviesCardTypeSaved &&
           <>

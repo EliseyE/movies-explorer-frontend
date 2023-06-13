@@ -4,7 +4,7 @@ import ButtonImg from '../ButtonImg/ButtonImg';
 import {
   IMAGE_CHECKED_RED_PATH,
 }
-from './constants'
+from './constants';
 
 function ButtonImgCheckedRed({ ButtonImgCheckedRedMod='', onClick }) {
 
