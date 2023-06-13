@@ -7,10 +7,11 @@ import Main from '../Main/Main';
 import Footer from '../Footer/Footer';
 import NotFoundPage from '../NotFoundPage/NotFoundPage';
 import PopupMenuNav from '../PopupMenuNav/PopupMenuNav';
-import SearchForm from '../SearchForm/SearchForm';
 import Movies from '../Movies/Movies';
+import SavedMovies from '../SavedMovies/SavedMovies';
 
-
+// TEMPORARY DATA
+import { dataArray, dataArraySaved } from '../../utils/data'
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -50,22 +51,34 @@ function App() {
     <>
       <div className='page'>
         <Header headerMod='header__place_page' buttonMenuNavClick={handleMenuNavClick} isLoggedIn={isLoggedIn} />
-        <Movies />
-        {/* <Main /> */}
+
+        <Routes>
+          {/* <Main /> */}
+
+          <Route path='/' element={ <Main /> } />
+
+          {/* <Movies  cardList={dataArray}/> */}
+          <Route path='/movies' element={ <Movies  cardList={dataArray} /> } />
+
+          {/* <SavedMovies cardList={dataArraySaved} /> */}
+          <Route path='/saved-movies' element={ <SavedMovies cardList={dataArraySaved} /> } />
+
+        </Routes>
+
         <Footer footerMod='footer__place_page'/>
+
       </div>
 
 
-    <Routes>
-    {/* <Route path={['/', '/1']} element={isLoggedIn ? <Navigate to="/" replace /> : <Navigate to="/sign-in" replace />} /> */}
-     <Route path='/404' element={<NotFoundPage />} />
-    </Routes>
+      {/* <Routes>
+      <Route path="/*" element={ <NotFoundPage to="/404" replace /> } />
+      </Routes> */}
 
-    <PopupMenuNav
-      isOpen={isMenuNavOpen}
-      onClose={closeAllPopups}
-    />
-  </>
+      <PopupMenuNav
+        isOpen={isMenuNavOpen}
+        onClose={closeAllPopups}
+      />
+    </>
   );
 }
 

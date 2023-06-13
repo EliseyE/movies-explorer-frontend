@@ -37,7 +37,7 @@ function MoviesCard({ movie, onMovieSave, onMovieSavedDelete, moviesCardTypeSave
               buttonMod='movies-card__saved-button' /> }
           </>
         }
-        { isMovieSaved && moviesCardTypeSaved && <ButtonImgCrossRound ButtonImgCrossRoundMod='movies-card__delete-button' onClick={handleDeleteClick} />}
+        { moviesCardTypeSaved && <ButtonImgCrossRound ButtonImgCrossRoundMod='movies-card__delete-button' onClick={handleDeleteClick} />}
       </div>
         <a href={movie.trailerLink} target='_blank' rel="noreferrer" className='movies-card__link' >
           <img src={movie.image.url}
@@ -52,15 +52,6 @@ function MoviesCard({ movie, onMovieSave, onMovieSavedDelete, moviesCardTypeSave
           {`${Math.floor(movie.duration/60)}ч ${movie.duration - 60*Math.floor(movie.duration/60) }м`}
         </ span>
       </div>
-
-
-
-
-        {/* <div className="photoCard__like">
-          <button onClick={handleLikeClick} className={cardLikeButtonClassName} type="button" />
-          <span className="photoCard__like-counter">{card.likes.length}</span>
-        </div> */}
-      {/* {isOwn && <button onClick={handleTrashClick} className="photoCard__trash-button" type="button" />} */}
     </li>
   );
 }

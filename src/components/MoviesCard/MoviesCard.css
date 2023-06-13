@@ -77,7 +77,7 @@
 }
 
 
-.overlay:hover .movies-card__save-button {
+.movies-card__overlay:hover .movies-card__save-button {
   visibility: visible;
   opacity: 1;
 }
@@ -88,7 +88,7 @@
 }
 
 
-.overlay:hover .movies-card__delete-button {
+.movies-card__overlay:hover .movies-card__delete-button {
   visibility: visible;
   opacity: 1;
 }

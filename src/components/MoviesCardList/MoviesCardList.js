@@ -4,10 +4,16 @@ import MoviesCard from '../MoviesCard/MoviesCard';
 
 
 
-function MoviesCardList({ cardList=[], onMovieSave, onMovieSavedDelete, moviesCardListMod='' }) {
+function MoviesCardList({
+  cardList=[],
+  onMovieSave,
+  onMovieSavedDelete,
+  moviesCardListMod='',
+  moviesCardTypeSaved
+  }) {
 
   return(
-    <section className={`movies-card-list ${moviesCardListMod}`}>
+    <div className={`movies-card-list ${moviesCardListMod}`}>
       <ul className='movies-card-list__collection'>
         {
             cardList.map((movie) => (
@@ -16,10 +22,11 @@ function MoviesCardList({ cardList=[], onMovieSave, onMovieSavedDelete, moviesCa
                 movie={movie}
                 onMovieSave={onMovieSave}
                 onMovieSavedDelete={onMovieSavedDelete}
+                moviesCardTypeSaved={moviesCardTypeSaved}
             />))
           }
         </ul>
-    </section>
+    </div>
   );
 }
 export default MoviesCardList;

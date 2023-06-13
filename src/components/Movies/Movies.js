@@ -4,15 +4,12 @@ import SearchForm from '../SearchForm/SearchForm';
 import Preloader from '../Preloader/Preloader';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 
-// TEMPORARY DATA
-import { dataArray } from '../../utils/data'
-
-function Movies() {
+function Movies({ cardList, onMovieSave, onMovieSavedDelete }) {
   const [isLoading, setIsLoading] = useState(false);
   const [moviesFilterState, setIsMoviesFilterState] = useState({});
 
 
-  function handleSetSearchFiltert(moviesFilterNewState) {
+  function handleSetSearchFilter(moviesFilterNewState) {
     setIsMoviesFilterState({...moviesFilterState, ...moviesFilterNewState});
   };
 
@@ -29,11 +26,16 @@ function Movies() {
       <SearchForm
         name='movies'
         placeholder='Фильм'
-        setSearchFilter={handleSetSearchFiltert}
+        setSearchFilter={handleSetSearchFilter}
         searchMovies={handleSearchMovies}
         formMod='search-form__place_movies'
       />
-      <MoviesCardList cardList={dataArray} moviesCardListMod='movies-card-list_place_movies' />
+      <MoviesCardList
+        cardList={cardList}
+        onMovieSave={onMovieSave}
+        onMovieSavedDelete={onMovieSavedDelete}
+        moviesCardListMod='movies-card-list_place_movies'
+      />
       {isLoading && <Preloader preloaderWheelMod='preloader__wheel_place_movies' /> }
     </section>
   );
