@@ -15,6 +15,10 @@
   margin-right: 70px;
 }
 
+.not-found-page_place_page {
+  width: 100vw;
+}
+
 @media screen and (max-width: 1024px) {
   .header__place_page {
     padding-left: 30px;

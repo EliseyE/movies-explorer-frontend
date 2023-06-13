@@ -14,9 +14,15 @@ import SavedMovies from '../SavedMovies/SavedMovies';
 import { dataArray, dataArraySaved } from '../../utils/data'
 
 function App() {
+
+  // UTILS
   const [isLoggedIn, setIsLoggedIn] = useState(true);
 
+  // USER
+  const [currentUser, setCurrentUser] = useState( {name: '', email: '', _id: '' } );
 
+
+  // UI
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isMenuNavOpen, setIsMenuNavOpen] = useState(false);
 
@@ -63,6 +69,13 @@ function App() {
           {/* <SavedMovies cardList={dataArraySaved} /> */}
           <Route path='/saved-movies' element={ <SavedMovies cardList={dataArraySaved} /> } />
 
+          <Route path="/*" element={
+            <>
+              <NotFoundPage className='not-found-page_place_page' />
+              <Navigate to="/404" replace={true} />
+            </> }
+          />
+
         </Routes>
 
         <Footer footerMod='footer__place_page'/>
@@ -71,7 +84,6 @@ function App() {
 
 
       {/* <Routes>
-      <Route path="/*" element={ <NotFoundPage to="/404" replace /> } />
       </Routes> */}
 
       <PopupMenuNav

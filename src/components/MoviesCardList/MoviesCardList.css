@@ -10,7 +10,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   column-gap: 30px;
-  row-gap: 43px;
+  row-gap: 42px;
 }
 
 @media screen and (max-width: 1216px) {
@@ -23,7 +23,7 @@
 @media screen and (max-width: 686px) {
   .movies-card-list__collection {
     grid-template-columns:  1fr;
-    row-gap: 24px;
+    row-gap: 22px;
   }
 }
 

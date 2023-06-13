@@ -3,8 +3,9 @@ import './Movies.css';
 import SearchForm from '../SearchForm/SearchForm';
 import Preloader from '../Preloader/Preloader';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
+import ButtonGrey from '../ButtonGrey/ButtonGrey';
 
-function Movies({ cardList, onMovieSave, onMovieSavedDelete }) {
+function Movies({ cardList, onMovieSave, onMovieSavedDelete, onMoreClick }) {
   const [isLoading, setIsLoading] = useState(false);
   const [moviesFilterState, setIsMoviesFilterState] = useState({});
 
@@ -36,6 +37,7 @@ function Movies({ cardList, onMovieSave, onMovieSavedDelete }) {
         onMovieSavedDelete={onMovieSavedDelete}
         moviesCardListMod='movies-card-list_place_movies'
       />
+      <ButtonGrey text='Ещё' buttonMod='button-grey__place_movies' onClick={onMoreClick} />
       {isLoading && <Preloader preloaderWheelMod='preloader__wheel_place_movies' /> }
     </section>
   );

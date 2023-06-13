@@ -114,4 +114,11 @@ const singleMovie =    {
   trailerLink: 'https://www.youtube.com/watch?v=AJznPy_iM4M'
 };
 
-export { dataArray, singleMovie, dataArraySaved };
+const testUser = {
+  name: '',
+  email: 'user@user.ru',
+  _id: '1',
+  password: '1111'
+};
+
+export { dataArray, singleMovie, dataArraySaved, testUser };
