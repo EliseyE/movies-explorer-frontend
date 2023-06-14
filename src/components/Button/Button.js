@@ -5,11 +5,12 @@ function Button({
   text='Кнопка',
   buttonMod='',
   buttonType='button',
-  onClick=undefined
+  onClick=undefined,
+  isDisabled
   }) {
 
   return(
-    <button className={`button ${buttonMod}`} type={buttonType} onClick={onClick}>
+    <button className={`button ${buttonMod}`} type={buttonType} onClick={onClick} disabled={isDisabled}>
       {text}
     </button>
   );

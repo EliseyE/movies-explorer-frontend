@@ -19,7 +19,7 @@ function UserEntryMenu() {
       {USERENTRYMENU_LINK1_TEXT}
       </Link>
       <Link to={USERENTRYMENU_LINK2_URL} >
-        <ButtonGreen text={USERENTRYMENU_LINK2_TEXT} buttonMod='user-entry-menu__signin-button'/>
+        <ButtonGreen text={USERENTRYMENU_LINK2_TEXT} buttonMod='user-entry-menu__signin-button' />
       </Link>
     </nav>
   );

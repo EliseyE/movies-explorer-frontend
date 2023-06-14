@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import './App.css';
 
+// COMPONENTS
 import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Footer from '../Footer/Footer';
@@ -9,17 +10,25 @@ import NotFoundPage from '../NotFoundPage/NotFoundPage';
 import PopupMenuNav from '../PopupMenuNav/PopupMenuNav';
 import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
+import Profile from '../Profile/Profile';
+
+// CONTEXT
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
 // TEMPORARY DATA
-import { dataArray, dataArraySaved } from '../../utils/data'
+import { dataArray, dataArraySaved, testUser } from '../../utils/data'
 
 function App() {
 
   // UTILS
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // USER
   const [currentUser, setCurrentUser] = useState( {name: '', email: '', _id: '' } );
+
+  useEffect(() => {
+    setCurrentUser(testUser);
+  }, []);
 
 
   // UI
@@ -55,19 +64,55 @@ function App() {
 
   return(
     <>
+    <CurrentUserContext.Provider value={currentUser}>
       <div className='page'>
-        <Header headerMod='header__place_page' buttonMenuNavClick={handleMenuNavClick} isLoggedIn={isLoggedIn} />
-
         <Routes>
-          {/* <Main /> */}
+          <Route path='/' element={
+            <>
+              <Header
+                headerMod='header__place_page'
+                buttonMenuNavClick={handleMenuNavClick}
+                isLoggedIn={isLoggedIn}
+              />
+              <Main />
+              <Footer footerMod='footer__place_page'/>
+            </> }
+          />
 
-          <Route path='/' element={ <Main /> } />
+          <Route path='/movies' element={
+            <>
+              <Header
+                headerMod='header__place_page'
+                buttonMenuNavClick={handleMenuNavClick}
+                isLoggedIn={isLoggedIn}
+              />
+              <Movies  cardList={dataArray} />
+              <Footer footerMod='footer__place_page'/>
+            </> }
+          />
 
-          {/* <Movies  cardList={dataArray}/> */}
-          <Route path='/movies' element={ <Movies  cardList={dataArray} /> } />
+          <Route path='/saved-movies' element={
+            <>
+            <Header
+              headerMod='header__place_page'
+              buttonMenuNavClick={handleMenuNavClick}
+              isLoggedIn={isLoggedIn}
+            />
+            <SavedMovies cardList={dataArraySaved} />
+            <Footer footerMod='footer__place_page'/>
+            </> }
+          />
 
-          {/* <SavedMovies cardList={dataArraySaved} /> */}
-          <Route path='/saved-movies' element={ <SavedMovies cardList={dataArraySaved} /> } />
+          <Route path='/profile' element={
+            <>
+            <Header
+              headerMod='header__place_page'
+              buttonMenuNavClick={handleMenuNavClick}
+              isLoggedIn={isLoggedIn}
+            />
+            <Profile />
+            </> }
+          />
 
           <Route path="/*" element={
             <>
@@ -77,14 +122,8 @@ function App() {
           />
 
         </Routes>
-
-        <Footer footerMod='footer__place_page'/>
-
       </div>
-
-
-      {/* <Routes>
-      </Routes> */}
+    </CurrentUserContext.Provider>
 
       <PopupMenuNav
         isOpen={isMenuNavOpen}

@@ -115,8 +115,8 @@ const singleMovie =    {
 };
 
 const testUser = {
-  name: '',
-  email: 'user@user.ru',
+  name: 'Виталий',
+  email: 'pochta@yandex.ru',
   _id: '1',
   password: '1111'
 };

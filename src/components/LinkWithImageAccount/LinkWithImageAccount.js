@@ -7,7 +7,11 @@ import {
   LINK_WITH_IMAGE_PATH,
 } from './constants';
 
-function LinkWithImageAccount({link, linkText, linkWithImageMod, imageMod, linkMod, onClick, imagePath=LINK_WITH_IMAGE_PATH }) {
+function refreshLocation(){
+  window.location.reload();
+}
+
+function LinkWithImageAccount({link, linkText, linkWithImageMod, imageMod, linkMod, onClick={refreshLocation}, imagePath=LINK_WITH_IMAGE_PATH }) {
 
   return(
     <LinkWithImage
