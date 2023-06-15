@@ -9,11 +9,12 @@ function EditFormMain({
   onSubmit,
   formMod='',
   titleMod='Название формы',
-  buttonIsActive=false,
+  buttonIsDisabled,
   message='',
   messageMod='',
   buttonMod='',
-  buttonText='Сохранить'
+  buttonText='Сохранить',
+  buttinIsHidden=true
   }) {
 
   return(
@@ -25,14 +26,15 @@ function EditFormMain({
       <div className='edit-form-main__containder'>
       <h2 className={`edit-form-main__title ${titleMod}`}>{title}</h2>
         {children}
-        <span className={`edit-form-main__message ${messageMod}`} >{message}</span>
+      {buttinIsHidden &&<span className={`edit-form-main__message ${messageMod}`} >{message}</span>}
       </div>
-      <ButtonBlue
-        text={buttonText}
-        buttonType='submit'
-        buttonMod={`edit-form-main__button ${buttonMod}`}
-        isDisabled={buttonIsActive}
-      />
+      {buttinIsHidden &&
+        <ButtonBlue
+          text={buttonText}
+          buttonType='submit'
+          buttonMod={`edit-form-main__button ${buttonMod}`}
+          isDisabled={buttonIsDisabled}
+        /> }
     </form>
   );
 }

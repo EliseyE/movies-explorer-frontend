@@ -18,22 +18,53 @@ import Login from '../Login/Login';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
 // TEMPORARY DATA
-import { dataArray, dataArraySaved, testUser } from '../../utils/data'
+import { dataArray, dataArraySaved, testUser } from '../../utils/data';
 
 function App() {
 
   // UTILS
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('loggedIn') === 'true');
+  const navigate = useNavigate();
+
 
   // USER
-  const [currentUser, setCurrentUser] = useState( {name: '', email: '', _id: '' } );
+  const [currentUser, setCurrentUser] = useState({ name: '', email: '', _id: '' });
+
+
+// DEMO MODE
+
+  // LOGIN
+  function handleLogIn({ email, password }) {
+    if( (testUser.email === email) && (testUser.password === password) ) {
+      setIsLoggedIn(true);
+      localStorage.setItem('loggedIn', 'true');
+      navigate('/', {replace: true});
+    };
+  };
+
+  // LOGOUT
+  function handleLogOut() {
+    localStorage.setItem('loggedIn', 'false');
+    navigate('/', {replace: true});
+    window.location.reload();
+
+  };
+
+  // UPDATE FPROFILE INFO
+  function handleUpdateUser({ name, email }) {
+    localStorage.setItem('userName', name);
+    localStorage.setItem('userEmail', email);
+    setCurrentUser({ ...currentUser, name: name, email: email });
+  };
 
   useEffect(() => {
+    localStorage.setItem('userName', testUser.name);
+    localStorage.setItem('userEmail', testUser.email);
     setCurrentUser(testUser);
   }, []);
 
 
-  // UI
+// UI
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isMenuNavOpen, setIsMenuNavOpen] = useState(false);
 
@@ -112,12 +143,12 @@ function App() {
               buttonMenuNavClick={handleMenuNavClick}
               isLoggedIn={isLoggedIn}
             />
-            <Profile />
+            <Profile onUpdateUser={handleUpdateUser} onLogOut={handleLogOut} />
             </> }
           />
 
           <Route path='/signup' element={ <Register /> } />
-          <Route path='/signin' element={ <Login /> } />
+          <Route path='/signin' element={ <Login onLogIn={handleLogIn} /> } />
 
           <Route path="/*" element={
             <>

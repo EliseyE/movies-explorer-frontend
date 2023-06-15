@@ -13,7 +13,7 @@ function ButtonBlue({
   return(
     <Button
       buttonMod={`button-blue ${buttonMod}`}
-      buttontype={buttonType}
+      buttonType={buttonType}
       onClick={onClick}
       text={text}
       isDisabled={isDisabled}

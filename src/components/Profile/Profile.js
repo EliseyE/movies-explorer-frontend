@@ -1,18 +1,20 @@
 import React, { useState, useEffect, useContext } from 'react';
 import './Profile.css';
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
-import EditForm from '../EditForm/EditForm';
+import { useNavigate } from 'react-router-dom';
+import EditFormMain from '../EditFormMain/EditFormMain';
 import ButtonText from '../ButtonText/ButtonText';
 import ButtonTextRed from '../ButtonTextRed/ButtonTextRed';
-import ButtonBlue from '../ButtonBlue/ButtonBlue';
+import InputsInternal from '../InputsInternal/InputsInternal'
 
 
 function Profile({
   onUpdateUser,
   onLogOut,
-  message='' }) {
+  message='При обновлении профиля произошла ошибка.' }) {
 
   const currentUser = useContext(CurrentUserContext);
+  const navigate = useNavigate();
 
   const [name, setName] = useState(currentUser.name);
   const [email, setEmail] = useState(currentUser.email);
@@ -47,21 +49,27 @@ function Profile({
       name,
       email
     });
+    setIsEditMode(false);
   };
 
   return(
     <section className='profile'>
-      <EditForm
+      <EditFormMain
         title={`Привет, ${currentUser.name}!`}
         name='profile'
         onSubmit={handleSubmit}
         message={message}
+        buttinIsHidden={isEditMode}
+        buttonIsDisabled={isValid}
+        titleMod='profile__title'
+        messageMod='profile__message'
+
       >
-        <fieldset className="profile__input-container">
-          <label className="profile__input-label">
-            <span className='profile__input-text' >Имя</span>
+        <InputsInternal>
+          <label className="inputs-internal__input-label">
+            <span className='inputs-internal__input-name' >Имя</span>
             <input
-              className="profile__input profile__input_kind_name"
+              className="inputs-internal__input internal-inputs_kind_name"
               placeholder=""
               type="text"
               name="profile-name"
@@ -74,10 +82,10 @@ function Profile({
               disabled={!isEditMode}
             />
           </label>
-          <label className="profile__input-label" >
-            <span className='profile__input-text' >E-mail</span>
+          <label className="inputs-internal__input-label" >
+            <span className='inputs-internal__input-name' >E-mail</span>
             <input
-              className="profile__input profile__input_kind_user-email"
+              className="inputs-internal__input internal-inputs_kind_user-email"
               placeholder=""
               type="email"
               name="user-email"
@@ -90,9 +98,7 @@ function Profile({
               disabled={!isEditMode}
             />
           </label>
-        </fieldset>
-
-        <span className='profile__message' >{message}</span>
+        </InputsInternal>
 
         <div className='profile__actions-container'>
           { !isEditMode &&
@@ -108,17 +114,8 @@ function Profile({
                 buttonMod='profile__button-text'
                 />
             </>}
-
-          { isEditMode &&
-            <ButtonBlue
-              text='Сохранить'
-              onClick={handleSubmit}
-              buttonType='submit'
-              buttonMod='profile__button'
-              isDisabled={isValid}
-            /> }
         </div>
-      </EditForm>
+      </EditFormMain>
     </section>
   );
 }

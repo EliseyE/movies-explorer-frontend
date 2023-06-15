@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './Register.css';
 import HelloPage from '../HelloPage/HelloPage';
 import EditFormMain from '../EditFormMain/EditFormMain';
-import RegularInputs from '../RegularInputs/RegularInputs';
+import InputsRegular from '../InputsRegular/InputsRegular';
 
 function Register({ message='Что-то пошло не так...' }) {
 
@@ -35,11 +35,11 @@ function Register({ message='Что-то пошло не так...' }) {
           formMod='edit-form__place_register'
           buttonText='Зарегистрироваться'
         >
-          <RegularInputs>
-            <label className="regular-inputs__input-label">
-              <span className='regular-inputs__input-name' >Имя</span>
+          <InputsRegular>
+            <label className="inputs-regular__input-label">
+              <span className='inputs-regular__input-name' >Имя</span>
               <input
-                className={`regular-inputs__input profile__input_kind_name ${!isNameValid && 'regular-inputs__input_invalid'}`}
+                className={`inputs-regular__input profile__input_kind_name ${!isNameValid && 'inputs-regular__input_invalid'}`}
                 placeholder=""
                 type="text"
                 name="profile-name"
@@ -51,10 +51,10 @@ function Register({ message='Что-то пошло не так...' }) {
                 // onChange={handleChageName}
               />
             </label>
-            <label className="regular-inputs__input-label" >
-              <span className='regular-inputs__input-name' >E-mail</span>
+            <label className="inputs-regular__input-label" >
+              <span className='inputs-regular__input-name' >E-mail</span>
               <input
-                className={`regular-inputs__input profile__input_kind_user-email ${!isEmailValid && 'regular-inputs__input_invalid'}`}
+                className={`inputs-regular__input profile__input_kind_user-email ${!isEmailValid && 'inputs-regular__input_invalid'}`}
                 placeholder=""
                 type="email"
                 name="user-email"
@@ -66,10 +66,10 @@ function Register({ message='Что-то пошло не так...' }) {
                 // onChange={handleChageEmail}
               />
               </label>
-              <label className="regular-inputs__input-label">
-              <span className='regular-inputs__input-name' >Пароль</span>
+              <label className="inputs-regular__input-label">
+              <span className='inputs-regular__input-name' >Пароль</span>
                 <input
-                  className={`regular-inputs__input profile__input_kind_user-password ${!isPasswordValid && 'regular-inputs__input_invalid'}`}
+                  className={`inputs-regular__input profile__input_kind_user-password ${!isPasswordValid && 'inputs-regular__input_invalid'}`}
                   placeholder=""
                   type="password"
                   name="password"
@@ -80,7 +80,7 @@ function Register({ message='Что-то пошло не так...' }) {
                 // ref={password}
                 />
             </label>
-          </RegularInputs>
+          </InputsRegular>
         </EditFormMain>
       </HelloPage>
     </section>

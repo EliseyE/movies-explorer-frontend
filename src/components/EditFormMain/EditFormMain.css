@@ -51,8 +51,12 @@
     min-height: 529px;
   }
 
-  .edit-form-main__button {
+  .button.edit-form-main__button {
     width: 100%;
     margin-top: 3px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    font-size: 12px;
+    line-height: 15px;
   }
 }
