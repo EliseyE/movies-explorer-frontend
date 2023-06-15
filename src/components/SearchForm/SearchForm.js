@@ -43,7 +43,7 @@ function SearchForm({ placeholder='', name='default', searchMovies, formMod='', 
             <input
               className="search-form__input search-form__input_kind_find-moveis"
               placeholder={placeholder}
-              type="text"
+              type="search"
               name="find-moveis"
               id="find-moveis"
               required

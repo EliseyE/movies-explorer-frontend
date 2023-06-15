@@ -105,7 +105,6 @@ function Profile({
               <ButtonTextRed
                 text='Выйти из аккаунта'
                 onClick={onLogOut}
-                buttonType='submit'
                 buttonMod='profile__button-text'
                 />
             </>}

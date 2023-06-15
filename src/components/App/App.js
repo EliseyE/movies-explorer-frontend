@@ -11,6 +11,8 @@ import PopupMenuNav from '../PopupMenuNav/PopupMenuNav';
 import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
 import Profile from '../Profile/Profile';
+import Register from '../Register/Register';
+import Login from '../Login/Login';
 
 // CONTEXT
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
@@ -114,10 +116,13 @@ function App() {
             </> }
           />
 
+          <Route path='/signup' element={ <Register /> } />
+          <Route path='/signin' element={ <Login /> } />
+
           <Route path="/*" element={
             <>
-              <NotFoundPage className='not-found-page_place_page' />
               <Navigate to="/404" replace={true} />
+              <NotFoundPage className='not-found-page_place_page' />
             </> }
           />
 
