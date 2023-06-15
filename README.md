@@ -1,70 +1,76 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Дипломный Проект (Frontend): Movies explorer
 
-## Available Scripts
+![Проект: Movies explorer (Frontend)](./readme.png)
 
-In the project directory, you can run:
+## Ссылки на проект
 
-### `npm start`
+[Ссылка на сгенерированный макет Figma](https://disk.yandex.ru/d/iBVz7G8mYfpYcg/ "Ссылка на сгенерированный макет Figma")
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+#
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## О проекте
 
-### `npm test`
+Перед вами frontend приложения - вторая часть дипломной работы студента Яндекс Практикум курса Веб-разработчик. Разработка frontend состоит из двух этапов:
+* Вёрстка (текущий этап)
+* Функциональная часть
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Приложение даёт возможность искать и сохранять в своём профиле понравившиеся фильмы, размещенные в сервисе beatfilm-movies.
 
-### `npm run build`
+#
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Роуты
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+`/signup` - Регистарация
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+`/signin` - Вход
 
-### `npm run eject`
+`/movies` - Фильмы
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+`/saved-movies` - Сохраненные фильмы
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+`/saved-movies` - Сохраненные фильмы
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+`/profile` - Профиль
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Директории
 
-## Learn More
+`/components` — папка с компонентами
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+`/contexts` — папка с файлами контектов
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+`/images` — папка с картинками
 
-### Code Splitting
+`/utils` — папка с файлами вспомогательных частей программы
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+`/vendor` — папка с файлами сторонних разработчиков (шрифты, нормализация)
 
-### Analyzing the Bundle Size
+`appConfig` - файл настройки приложения
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+`generateComponent.sh` - bash скрипт позволяет генерировать компонент в составе js и css файлов
 
-### Making a Progressive Web App
+## Технологии
+Языки разметки и программирования: HTML, CSS, JavaScript, JSX
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+  ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white) ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E) ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 
-### Advanced Configuration
+## Функциональность
+Приложение может открывать страницы:
+* Главная;
+* Фильмы;
+* Сохранненные фильмы;
+* Профиль и его редактирование. Возможно редактирование данных в Демо-режиме;
+* Регистарция;
+* Вход. Реализован Демо-режим. Для входа возможно использовать пользователя
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+      name: Виталий
+      email: pochta@yandex.ru
+      password: 1111
 
-### Deployment
+* Валидация и сообщения об ошибках, защита роутов будут реализовываться на следующем этапе разработки проекта.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
-### `npm run build` fails to minify
+## Планы
+Продолжить разработку приложения: клиентская часть (frontend) - функциональная часть.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+last upd 15/06/2023
