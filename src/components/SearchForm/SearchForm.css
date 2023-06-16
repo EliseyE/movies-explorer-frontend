@@ -38,6 +38,7 @@
 
 .search-form__input:focus {
   outline: none;
+  border-bottom: #3456F3 1px solid;
 }
 
 .search-form__image {

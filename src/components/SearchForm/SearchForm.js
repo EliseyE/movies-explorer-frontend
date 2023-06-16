@@ -31,7 +31,6 @@ function SearchForm({ placeholder='', name='default', searchMovies, formMod='', 
       onSubmit={handleSubmit}
       className={`search-form search-form_type_${name} ${formMod}`}
       name={`search-form_type_${name}`}
-      noValidate
     >
       <div className='search-form__conteiner'>
         <div
