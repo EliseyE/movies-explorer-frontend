@@ -9,13 +9,18 @@ function LinkWithImage({
   imagePath='',
   imageMod='',
   linkMod='',
-  onClick=undefined }) {
+  onClick=undefined,
+  isWhite
+  }) {
 
   return(
     <nav className={`link-with-image ${linkWithImageMod}`}>
       <Link
         onClick={onClick}
-        className={`link-with-image__link ${linkMod}`}
+        className={`
+        link-with-image__link
+        ${isWhite && 'link-with-image__link_color_white'}
+        ${linkMod}`}
         to={link} >{linkText}</Link>
       <div
         className={`link-with-image__image ${imageMod}`}

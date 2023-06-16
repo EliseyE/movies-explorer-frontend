@@ -15,9 +15,13 @@
   line-height: 16px;
   width: fit-content;
   height: fit-content;
-  color: #fff;
+  color: #000;
   text-decoration: none;
   transition: opacity .25s;
+}
+
+.user-entry-menu__link_color_white {
+  color: #fff;
 }
 
 .user-entry-menu__link:hover {

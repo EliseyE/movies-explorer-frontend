@@ -106,6 +106,7 @@ function App() {
                 headerMod='header__place_page'
                 buttonMenuNavClick={handleMenuNavClick}
                 isLoggedIn={isLoggedIn}
+                isColored={true}
               />
               <Main />
               <Footer footerMod='footer__place_page'/>

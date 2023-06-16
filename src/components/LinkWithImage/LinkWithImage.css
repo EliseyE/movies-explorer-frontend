@@ -3,7 +3,7 @@
   font-family: 'Inter', Arial, sans-serif;
   display: flex;
   align-items: center;
-  gap: 17px;
+  gap: 16px;
 }
 
 .link-with-image__link {
@@ -24,14 +24,15 @@
   opacity: 0.7;
 }
 
+.link-with-image__link_color_white {
+  color: #fff;
+}
+
 .link-with-image__image {
   width: 26px;
   height: 30px;
-  padding:  8px 7.25px;
   background-position: center;
-  background-size:auto;
+  background-size: cover;
   background-repeat: no-repeat;
-  background-color: #F9F9F9;
-  border-radius: 4px;
-  box-sizing: border-box;
+  background-color: transparent;
 }

@@ -11,11 +11,14 @@ import {
 } from './constants';
 
 
-function UserEntryMenu() {
+function UserEntryMenu({ isWhiteText }) {
 
   return(
     <nav className='user-entry-menu'>
-      <Link to={USERENTRYMENU_LINK1_URL} className='user-entry-menu__link' >
+      <Link
+        to={USERENTRYMENU_LINK1_URL}
+        className={`user-entry-menu__link ${isWhiteText && 'user-entry-menu__link_color_white'}`}
+      >
       {USERENTRYMENU_LINK1_TEXT}
       </Link>
       <Link to={USERENTRYMENU_LINK2_URL} >
