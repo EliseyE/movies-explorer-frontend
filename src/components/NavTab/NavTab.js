@@ -7,7 +7,7 @@ function NavTab() {
 
   return(
     <nav className='navtab'>
-      <a href='#about'><ButtonTranspapentGrey text='Узнать больше'/></a>
+      <ButtonTranspapentGrey text='Узнать больше' onClick={ () => window.location.href='#about' } />
     </nav>
   );
 }

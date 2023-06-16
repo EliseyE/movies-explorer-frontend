@@ -38,7 +38,7 @@ function App() {
     if( (testUser.email === email) && (testUser.password === password) ) {
       setIsLoggedIn(true);
       localStorage.setItem('loggedIn', 'true');
-      navigate('/', {replace: true});
+      navigate('/movies', {replace: true});
     };
   };
 
@@ -103,44 +103,44 @@ function App() {
           <Route path='/' element={
             <>
               <Header
-                headerMod='header__place_page'
+                headerMod='header_place_page'
                 buttonMenuNavClick={handleMenuNavClick}
                 isLoggedIn={isLoggedIn}
                 isColored={true}
               />
               <Main />
-              <Footer footerMod='footer__place_page'/>
+              <Footer footerMod='footer_place_page'/>
             </> }
           />
 
           <Route path='/movies' element={
             <>
               <Header
-                headerMod='header__place_page'
+                headerMod='header_place_page'
                 buttonMenuNavClick={handleMenuNavClick}
                 isLoggedIn={isLoggedIn}
               />
               <Movies  cardList={dataArray} />
-              <Footer footerMod='footer__place_page'/>
+              <Footer footerMod='footer_place_page'/>
             </> }
           />
 
           <Route path='/saved-movies' element={
             <>
             <Header
-              headerMod='header__place_page'
+              headerMod='header_place_page'
               buttonMenuNavClick={handleMenuNavClick}
               isLoggedIn={isLoggedIn}
             />
             <SavedMovies cardList={dataArraySaved} />
-            <Footer footerMod='footer__place_page'/>
+            <Footer footerMod='footer_place_page'/>
             </> }
           />
 
           <Route path='/profile' element={
             <>
             <Header
-              headerMod='header__place_page'
+              headerMod='header_place_page'
               buttonMenuNavClick={handleMenuNavClick}
               isLoggedIn={isLoggedIn}
             />

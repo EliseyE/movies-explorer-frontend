@@ -12,7 +12,7 @@ function PopupMenuNav({ isOpen, onClose }) {
     <Popup
       isOpen={isOpen}
       onClose={onClose}
-      popupMod='popup__position_right'
+      popupMod='popup_position_right'
     >
       <div className='popup-menu-nav'>
         <Navigation

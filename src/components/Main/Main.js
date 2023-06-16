@@ -10,7 +10,7 @@ function Main() {
 
   return(
     <main className='content'>
-      <Promo promoMod='promo__place_content'/>
+      <Promo promoMod='promo_place_content'/>
       <AboutProject aboutProjectMod='about-project_place_content' />
       <Techs techsMod='techs_place_content' />
       <AboutMe aboutMeMod='about-me_place_content' />

@@ -11,7 +11,7 @@
   background-color: #fff;
 }
 
-.popup.popup__position_right {
+.popup.popup_position_right {
   justify-content: flex-end;
 }
 

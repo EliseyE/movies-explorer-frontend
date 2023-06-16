@@ -5,7 +5,7 @@
   align-items: center;
 }
 
-.promo__place_content {
+.promo_place_content {
   box-sizing: border-box;
   padding-left: 70px;
   padding-right: 70px;
@@ -35,7 +35,7 @@
 }
 
 @media screen and (max-width: 1124px) {
-  .promo__place_content {
+  .promo_place_content {
     padding-left: 50px;
     padding-right: 50px;
   }
@@ -68,7 +68,7 @@
 }
 
 @media screen and (max-width: 686px) {
-  .promo__place_content {
+  .promo_place_content {
     padding-left: 0;
     padding-right: 0;
   }
