@@ -1,0 +1,39 @@
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0.12s, opacity 0.12s ease-in-out;
+}
+
+.popup_is-opened {
+  visibility: visible;
+  opacity: 1;
+}
+
+.popup__container {
+  position: relative;
+}
+
+.button-img-cross_place_popup {
+  width: 32px;
+  height: 32px;
+
+  position: absolute;
+  top: 22.44px;
+  right: 22.44px;
+}
+
+@media screen and (max-width: 650px) {
+  .button-img-cross_place_popup {
+    top: 13.44px;
+    right: 13.44px;
+  }
+}

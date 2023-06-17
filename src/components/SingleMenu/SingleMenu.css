@@ -1,0 +1,42 @@
+.single-menu {
+  font-family: 'Inter', Arial, sans-serif;
+  font-style: normal;
+  color: rgba(160, 160, 160, 1);
+  display: flex;
+  gap: 6px;
+}
+
+.single-menu__text {
+  padding: 0;
+  margin: 0;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+}
+
+.single-menu__link {
+  text-decoration: none;
+  cursor: pointer;
+  transition: .25s;
+
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  color: rgba(52, 86, 243, 1);
+}
+
+.single-menu__link:hover {
+  opacity: 0.7;
+}
+
+@media screen and (max-width: 650px) {
+  .single-menu__text {
+    font-size: 12px;
+    line-height: 15px;
+  }
+
+  .single-menu__link {
+    font-size: 12px;
+    line-height: 15px;
+  }
+}

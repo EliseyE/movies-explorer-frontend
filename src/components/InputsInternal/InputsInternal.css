@@ -1,0 +1,141 @@
+.inputs-internal {
+  width: 410px;
+  padding: 0;
+  margin: 83px 0 190px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  border: 0;
+}
+
+.inputs-internal__input-label {
+  padding: 0 0 16px 0;
+  box-sizing: border-box;
+  font-size: 11px;
+  line-height: 13px;
+  font-weight: 400;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: #E8E8E8 1px solid;
+}
+
+.inputs-internal__input-label:last-child {
+  border: 0;
+  padding: 0;
+
+}
+
+.inputs-internal__input {
+  width: 122px;
+  padding: 0;
+  border: 0;
+  text-align: right;
+  background-color: #fff;
+}
+
+.inputs-internal__input:disabled {
+  color: #000;
+}
+
+.inputs-internal__input:focus {
+  outline: none;
+  border-bottom: #3456F3 1px solid;
+}
+
+.inputs-internal__input-name {
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 13px;
+}
+
+
+@media screen and (max-width: 768px) {
+  .inputs-internal {
+    margin-top: 56px;
+    margin-bottom: 181px;
+  }
+}
+
+@media screen and (max-width: 540px) {
+  .inputs-internal {
+    margin-top: 0;
+    width: 260px;
+    margin-bottom: 349px;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.inputs-regular {
+  width: 396px;
+  margin: 0 0 6px 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  border: 0;
+}
+
+.inputs-regular__input-label {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+}
+
+.inputs-regular__input {
+  padding: 0 0 10px 0;
+  border: 0;
+  border-bottom: #E8E8E8 1px solid;
+  color: #000;
+  background-color: #fff;
+  outline: none;
+}
+
+.inputs-regular__input:disabled {
+  color: #000;
+}
+
+.inputs-regular__input:focus {
+  border-bottom: #3456F3 1px solid;
+}
+
+.inputs-regular__input-name {
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 13px;
+  font-size: 10px;
+  line-height: 12px;
+  color: rgba(160, 160, 160, 1);
+}
+
+.inputs-regular__input_invalid {
+  color: rgba(255, 48, 85, 1);
+}
+
+@media screen and (max-width: 650px) {
+  .inputs-regular {
+    width: 260px;
+  }
+}

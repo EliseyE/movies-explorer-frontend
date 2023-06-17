@@ -1,0 +1,49 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header_color_blue {
+  background-color: #073042;
+}
+
+.header__logo {
+  font-size: 0;
+  margin: 18px 59px 18px 0;
+}
+
+.header__button-options {
+  display: none;
+}
+
+.header__account {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .navigation.navigation_place_header {
+    visibility: hidden;
+    display: none;
+  }
+
+  .header__button-options {
+    display: block;
+  }
+
+  .link-with-image.header__account {
+    visibility: hidden;
+    display: none;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .button-img.header__button-options {
+    width: 36px;
+    height: 43px;
+  }
+
+  .header__logo {
+    margin-right: 0;
+  }
+}

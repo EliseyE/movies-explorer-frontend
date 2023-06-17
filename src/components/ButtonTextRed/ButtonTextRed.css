@@ -1,0 +1,21 @@
+.button-text-red {
+  padding: 0;
+
+  font-family: 'Inter', Arial, sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 16px;
+  border: 0;
+  background-color: rgba(255, 255, 255, 1);
+  color: rgba(255, 48, 85, 1);
+  cursor: pointer;
+}
+
+.button-text-red:hover {
+  opacity: .7;
+  }
+
+.button-text-red:active {
+  opacity: .5;
+}

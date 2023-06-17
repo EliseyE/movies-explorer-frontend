@@ -1,0 +1,14 @@
+.button-grey {
+  color: #000;
+  line-height: 15px;
+  background-color: #F9F9F9;
+  border-radius: 6px;
+}
+
+.button-grey:hover {
+  background-color: rgba(248, 248, 248, .8);
+}
+
+.button.button-grey:active {
+  background-color: rgba(249, 249, 249, .7);
+}
