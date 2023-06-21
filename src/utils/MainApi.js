@@ -79,3 +79,7 @@ export const saveMovie = (movie) => {
 export const deleteSavedMovie = (id) => {
   return makeRequset(`/movies/${id}`, 'DELETE', undefined, undefined);
 };
+
+export const updateUserInfo = (userData) => {
+  return makeRequset(`/users/me`, 'PATCH', userData, undefined);
+};

@@ -35,31 +35,34 @@ import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
 function App() {
 
-  // UTILS
+// UTILS
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
-  // USER
+// USER
   const [currentUser, setCurrentUser] = useState({ name: '', email: '', _id: '' });
 
-  // MOVIES
+// MOVIES LISTS
   const [moviesList, setMoviesList] = useState([]);
   const [moviesSavedList, setMoviesSavedList] = useState([]);
 
-  // SEARCH
+// SEARCH
   const [foundMoviesList, setFoundMoviesList] = useState([]);
-  const [foundSavedMoviesList, setFoundSavedMoviesList] = useState([]);
   const [moviesFilterState, setMoviesFilterState] = useState({ shortMovieDuration: 40 });
-  const [savedMoviesFilterState, setSavedMoviesFilterState] = useState({ shortMovieDuration: 40 });
   const [searchQueryStateMovies, setSearchQueryStateMovies] = useState('');
+  const [moviesMessage, setMoviesMessage] = useState('');
+
+  const [foundSavedMoviesList, setFoundSavedMoviesList] = useState([]);
+  const [savedMoviesFilterState, setSavedMoviesFilterState] = useState({ shortMovieDuration: 40 });
   const [searchQueryStateSavedMovies, setSearchQueryStateSavedMovies] = useState('');
+  const [savedMoviesMessage, setSavedMoviesMessage] = useState('');
 
-
-  // UI
+// UI
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isMenuNavOpen, setIsMenuNavOpen] = useState(false);
+
 
 // UI FUNCTIONS
 
@@ -124,17 +127,28 @@ function toggleMarkMovieAsSaved(movie) {
 // SEARCHING OF MOVIES
 async function handleSearchMovies(searchQuery, filterValue) {
   setFoundMoviesList([]);
-  const movies = await handleGetMovies();
+    let movies = [];
+  try {
+    movies = await handleGetMovies();
+  } catch(err) {
+      console.log('Error:', err);
+      setMoviesMessage(`
+        Во время запроса произошла ошибка.\n
+        Возможно, проблема с соединением или сервер недоступен.\n
+        Подождите немного и попробуйте ещё раз
+      `);
+  }
+    const keyWordsArray = getArrayKeyWords(searchQuery);
+    let foundMovies = searchInArrayByProperties(PROPERTIES_FOR_SEARCHNG_ARRAY, movies, keyWordsArray);
 
-  const keyWordsArray = getArrayKeyWords(searchQuery);
-  let foundMovies = searchInArrayByProperties(PROPERTIES_FOR_SEARCHNG_ARRAY, movies, keyWordsArray);
+    foundMovies = filterMovies(foundMovies, filterValue);
+    foundMovies = markMoviesAsSaved(foundMovies);
 
-  foundMovies = filterMovies(foundMovies, filterValue);
-  foundMovies = markMoviesAsSaved(foundMovies);
+    setMoviesFilterState({...moviesFilterState, ...filterValue});
+    setSearchQueryStateMovies(searchQuery);
+    setFoundMoviesList(foundMovies);
 
-  setMoviesFilterState({...moviesFilterState, ...filterValue});
-  setSearchQueryStateMovies(searchQuery);
-  setFoundMoviesList(foundMovies);
+    if(foundMovies.length === 0) setMoviesMessage('Ничего не найдено');
 };
 
 // SEARCHING OF SAVED MOVIES
@@ -148,14 +162,17 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
   setSavedMoviesFilterState({...savedMoviesFilterState, ...filterValue});
   setSearchQueryStateSavedMovies(searchQuery);
   setFoundSavedMoviesList(foundSavedMovies);
+
+  if(foundSavedMovies.length === 0) setSavedMoviesMessage('Ничего не найдено');
 };
 
 // API
 
 // BEATFILM MOVIES API
   async function handleGetMovies() {
-    let movies = await beatfilmMoviesApiModule.getInitialCards();
-    movies = movies.map(item => {
+    let movies = [];
+      movies = await beatfilmMoviesApiModule.getInitialCards();
+      movies = movies.map(item => {
       return {
           country: item.country,
           director: item.director,
@@ -168,11 +185,11 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
           movieId: item.id,
           nameRU: item.nameRU,
           nameEN: item.nameEN,
+          }
         }
-      }
-    );
-    setMoviesList(movies)
-    return movies;
+      );
+      setMoviesList(movies)
+      return movies;
   };
 
 // MOVIES EXPLORER API
@@ -277,6 +294,16 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
     }
   };
 
+  // UPDATE PROFILE INFO
+  async function handleUpdateUserInfo(userData) {
+    try {
+      const res = await mainApi.updateUserInfo(userData);
+      setCurrentUser({ ...currentUser, ...res.resData });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return(
     <>
     <CurrentUserContext.Provider value={currentUser}>
@@ -309,6 +336,7 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
                 onMovieSavedDelete={handleMovieSavedDelete}
                 filterState={moviesFilterState}
                 searchQueryState={searchQueryStateMovies}
+                message={moviesMessage}
               />
               <Footer footerMod='footer_place_page'/>
             </> }
@@ -327,6 +355,7 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
               onMovieSavedDelete={handleMovieSavedDelete}
               filterState={savedMoviesFilterState}
               searchQueryState={searchQueryStateSavedMovies}
+              message={savedMoviesMessage}
             />
             <Footer footerMod='footer_place_page'/>
             </> }
@@ -339,7 +368,10 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
               buttonMenuNavClick={handleMenuNavClick}
               isLoggedIn={isLoggedIn}
             />
-            <Profile onUpdateUser onLogOut={handleLogOut} />
+            <Profile
+              onUpdateUser={handleUpdateUserInfo}
+              onLogOut={handleLogOut}
+            />
             </> }
           />
 

@@ -8,32 +8,22 @@ class BeatfilmMoviesApi {
   }
 
   async _responceProcessing(res) {
-    try {
       if(res.ok) {
         const resData = await res.json();
         return resData;
       }
-      return Promise.reject(`Ошибка в Api: ${res.status}`);
-    } catch(err) {
-      return err;
+      return Promise.reject(res);
     }
-  }
 
   async _downloadData(path) {
-    try {
       const requset = await fetch(`${this._baseUrl}${path}` );
       const resData = await this._responceProcessing(requset);
       return resData;
-    }
-    catch(err) {
-      return err;
-    }
   }
 
   getInitialCards() {
     return this._downloadData('/beatfilm-movies');
   }
-
 };
 
 const beatfilmMoviesApiModule = new BeatfilmMoviesApi(BEATFILM_MOVIES_BASE_URL_API);

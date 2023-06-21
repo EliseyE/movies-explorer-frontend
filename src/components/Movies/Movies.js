@@ -12,7 +12,8 @@ function Movies({
     onMoreClick,
     onSearchMovies,
     filterState,
-    searchQueryState
+    searchQueryState,
+    message
   }) {
 
   const [isLoading, setIsLoading] = useState(false);
@@ -42,12 +43,19 @@ function Movies({
       />
       {!isLoading &&
       <>
-        <MoviesCardList
-          moviesList={foundMovies}
-          onMovieSave={onMovieSave}
-          onMovieSavedDelete={onMovieSavedDelete}
-          moviesCardListMod='movies-card-list_place_movies'
+        {
+          (foundMovies.length === 0 && searchQueryState) &&
+          <span className='movies__message'>{message}</span>
+        }
+        { (foundMovies.length > 0) &&
+          <MoviesCardList
+            moviesList={foundMovies}
+            onMovieSave={onMovieSave}
+            onMovieSavedDelete={onMovieSavedDelete}
+            moviesCardListMod='movies-card-list_place_movies'
           />
+        }
+
           <ButtonGrey text='Ещё' buttonMod='button-grey__place_movies' onClick={onMoreClick} />
         </>
       }

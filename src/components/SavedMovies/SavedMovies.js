@@ -10,7 +10,8 @@ function SavedMovies({
   moviesList,
   filterState,
   searchQueryState,
-  onSearchMovies
+  onSearchMovies,
+  message
   }) {
 
   const [isLoading, setIsLoading] = useState(false);
@@ -38,12 +39,22 @@ function SavedMovies({
         filterState={filter}
         searchQueryState={searchQueryState}
       />
-      <MoviesCardList
-        moviesList={moviesList}
-        moviesCardTypeSaved={true}
-        onMovieSavedDelete={onMovieSavedDelete}
-        moviesCardListMod='movies-card-list_place_saved-movies'
-      />
+      {!isLoading &&
+      <>
+        {
+          (moviesList.length === 0 && searchQueryState) &&
+          <span className='saved-movies__message'>{message}</span>
+        }
+        { (moviesList.length > 0) &&
+        <MoviesCardList
+          moviesList={moviesList}
+          moviesCardTypeSaved={true}
+          onMovieSavedDelete={onMovieSavedDelete}
+          moviesCardListMod='movies-card-list_place_saved-movies'
+        />
+        }
+      </>
+      }
       {isLoading && <Preloader preloaderWheelMod='preloader__wheel_place_saved-movies' /> }
     </section>
   );
