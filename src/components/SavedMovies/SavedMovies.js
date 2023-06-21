@@ -1,27 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './SavedMovies.css';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Preloader from '../Preloader/Preloader';
 
 
-function SavedMovies({ onMovieSavedDelete, cardList }) {
+function SavedMovies({
+  onMovieSavedDelete,
+  moviesList,
+  filterState,
+  searchQueryState,
+  onSearchMovies
+  }) {
 
   const [isLoading, setIsLoading] = useState(false);
+  const [filter, setFilter] = useState(filterState);
 
-  const [moviesFilterState, setIsMoviesFilterState] = useState({});
 
   function handleSetSearchFilter(moviesFilterNewState) {
-    setIsMoviesFilterState({...moviesFilterState, ...moviesFilterNewState});
+    setFilter(moviesFilterNewState);
   };
 
   function handleSearchMovies(searchQuery) {
-    console.log(searchQuery);
+    setIsLoading(true);
+    onSearchMovies(searchQuery, filter);
+    setIsLoading(false);
   };
-
-  useEffect(() => {
-    console.log(moviesFilterState);
-  }, [moviesFilterState]);
 
   return(
     <section className='saved-movies'>
@@ -31,9 +35,11 @@ function SavedMovies({ onMovieSavedDelete, cardList }) {
         setSearchFilter={handleSetSearchFilter}
         searchMovies={handleSearchMovies}
         formMod='search-form__place_saved-movies'
+        filterState={filter}
+        searchQueryState={searchQueryState}
       />
       <MoviesCardList
-        cardList={cardList}
+        moviesList={moviesList}
         moviesCardTypeSaved={true}
         onMovieSavedDelete={onMovieSavedDelete}
         moviesCardListMod='movies-card-list_place_saved-movies'

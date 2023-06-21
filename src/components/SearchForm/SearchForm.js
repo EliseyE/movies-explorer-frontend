@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import './SearchForm.css';
 import ToggleSwitch from '../ToggleSwitch/ToggleSwitch';
 import ButtonBlueEllipse from '../ButtonBlueEllipse/ButtonBlueEllipse';
@@ -6,19 +6,31 @@ import { useState } from 'react';
 
 import imagePath from '../../images/icons/lens-ico.svg'
 
-function SearchForm({ placeholder='', name='default', searchMovies, formMod='', sumbitButtonMod='', setSearchFilter }) {
+function SearchForm({
+  placeholder='',
+  name='default',
+  searchMovies,
+  formMod='',
+  sumbitButtonMod='',
+  setSearchFilter,
+  filterState={},
+  searchQueryState=''
+  }) {
 
-  const searchQuery = useRef();
-
-  const [moviesFilterState, setIsMoviesFilterState] = useState({});
+  const [moviesFilterState, setIsMoviesFilterState] = useState(filterState);
+  const [searchQuery, setSearchQuery] = useState(searchQueryState);
 
   function handleSubmit(e) {
     e.preventDefault();
-    if(searchQuery.current.value !== '') searchMovies(searchQuery.current.value);
+    if(searchQuery !== '') searchMovies(searchQuery);
   };
 
   function handleToggleSwitch(isActive) {
     setIsMoviesFilterState({ ...moviesFilterState, shortMovies: isActive });
+  };
+
+  function handleSetSearchQuery(e) {
+    setSearchQuery(e.target.value)
   };
 
   useEffect(() => {
@@ -46,7 +58,8 @@ function SearchForm({ placeholder='', name='default', searchMovies, formMod='', 
               name="find-moveis"
               id="find-moveis"
               required
-              ref={searchQuery}
+              onChange={handleSetSearchQuery}
+              value={searchQuery || ''}
               />
             <span className="search-form__input-error find-moveis-error"></span>
           </label>
@@ -56,7 +69,7 @@ function SearchForm({ placeholder='', name='default', searchMovies, formMod='', 
       </div>
 
       <div className='search-form__filter'>
-          <ToggleSwitch name='Короткометражки' isDefaultState={false} onToggle={handleToggleSwitch} />
+          <ToggleSwitch name='Короткометражки' isDefaultState={moviesFilterState.shortMovies} onToggle={handleToggleSwitch} />
           <span className='search-form__filter-title' >Короткометражки</span>
       </div>
     </form>

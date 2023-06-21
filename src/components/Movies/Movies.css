@@ -11,8 +11,9 @@
     ". more ." ;
 }
 
-.preloader__wheel.preloader__wheel_place_movies {
-  top: 20%;
+.movies__preloader-container {
+  grid-area: movies;
+  height: 30vh;
 }
 
 .search-form__place_movies {

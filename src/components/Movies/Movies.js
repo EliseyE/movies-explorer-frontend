@@ -1,26 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './Movies.css';
 import SearchForm from '../SearchForm/SearchForm';
 import Preloader from '../Preloader/Preloader';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import ButtonGrey from '../ButtonGrey/ButtonGrey';
 
-function Movies({ cardList, onMovieSave, onMovieSavedDelete, onMoreClick }) {
+function Movies({
+    foundMovies,
+    onMovieSave,
+    onMovieSavedDelete,
+    onMoreClick,
+    onSearchMovies,
+    filterState,
+    searchQueryState
+  }) {
+
   const [isLoading, setIsLoading] = useState(false);
-  const [moviesFilterState, setIsMoviesFilterState] = useState({});
+  const [filter, setFilter] = useState(filterState);
 
 
   function handleSetSearchFilter(moviesFilterNewState) {
-    setIsMoviesFilterState({...moviesFilterState, ...moviesFilterNewState});
+    setFilter(moviesFilterNewState);
   };
 
-  function handleSearchMovies(searchQuery) {
-    console.log(searchQuery);
+  async function handleSearchMovies(searchQuery) {
+    setIsLoading(true);
+    await onSearchMovies(searchQuery, filter);
+    setIsLoading(false);
   };
-
-  useEffect(() => {
-    console.log(moviesFilterState);
-  }, [moviesFilterState]);
 
   return(
     <section className='movies'>
@@ -29,16 +36,22 @@ function Movies({ cardList, onMovieSave, onMovieSavedDelete, onMoreClick }) {
         placeholder='Фильм'
         setSearchFilter={handleSetSearchFilter}
         searchMovies={handleSearchMovies}
+        filterState={filter}
+        searchQueryState={searchQueryState}
         formMod='search-form__place_movies'
       />
-      <MoviesCardList
-        cardList={cardList}
-        onMovieSave={onMovieSave}
-        onMovieSavedDelete={onMovieSavedDelete}
-        moviesCardListMod='movies-card-list_place_movies'
-      />
-      <ButtonGrey text='Ещё' buttonMod='button-grey__place_movies' onClick={onMoreClick} />
-      {isLoading && <Preloader preloaderWheelMod='preloader__wheel_place_movies' /> }
+      {!isLoading &&
+      <>
+        <MoviesCardList
+          moviesList={foundMovies}
+          onMovieSave={onMovieSave}
+          onMovieSavedDelete={onMovieSavedDelete}
+          moviesCardListMod='movies-card-list_place_movies'
+          />
+          <ButtonGrey text='Ещё' buttonMod='button-grey__place_movies' onClick={onMoreClick} />
+        </>
+      }
+      {isLoading && <div className='movies__preloader-container'><Preloader /></div> }
     </section>
   );
 }

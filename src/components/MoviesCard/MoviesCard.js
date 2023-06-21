@@ -1,25 +1,38 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './MoviesCard.css';
 import ButtonGreyEllipse from '../ButtonGreyEllipse/ButtonGreyEllipse';
 import ButtonImgCrossRound from '../ButtonImgCrossRound/ButtonImgCrossRound';
 import ButtonImgCheckedRed from '../ButtonImgCheckedRed/ButtonImgCheckedRed';
 import { useState } from 'react';
 
-function MoviesCard({ movie, onMovieSave, onMovieSavedDelete, moviesCardTypeSaved=false }) {
+function MoviesCard({
+    movie={
+      trailer: '',
+      image: '',
+      nameRU: 'Фильм',
+      duration: 0
+    },
+    onMovieSave,
+    onMovieSavedDelete,
+    moviesCardTypeSaved=false,
+    }) {
 
   const [isMovieSaved, setIsMovieSaved] = useState(false);
+  const [movieCard, setMovieCard] = useState({});
 
   function handleSaveClick() {
-    // onMovieSave(movie);
-    setIsMovieSaved(true);
-    console.log('Saved');
+    onMovieSave(movieCard);
   }
 
   function handleDeleteClick() {
-    // onMovieSavedDelete(movie);
-    setIsMovieSaved(false);
-    console.log('Delete from saved');
+    console.log(movieCard);
+    onMovieSavedDelete(movieCard._id);
   }
+
+  useEffect(() => {
+    setIsMovieSaved(movie._id ? true : false);
+    setMovieCard(movie);
+  }, [movie]);
 
   return(
     <li className='movies-card'>
@@ -39,17 +52,23 @@ function MoviesCard({ movie, onMovieSave, onMovieSavedDelete, moviesCardTypeSave
         }
         { moviesCardTypeSaved && <ButtonImgCrossRound ButtonImgCrossRoundMod='movies-card__delete-button' onClick={handleDeleteClick} />}
       </div>
-        <a href={movie.trailerLink} target='_blank' rel="noreferrer" className='movies-card__link' >
-          <img src={movie.image.url}
-            alt={movie.nameRU}
-            className="movie__image"
-          />
+        <a href={movieCard.trailer} target='_blank' rel="noreferrer" className='movies-card__link' >
+          <div className='movies-card__preview-img'>
+            <img src={movieCard.image}
+              alt={movieCard.nameRU}
+              className="movies-card__image"
+            />
+          </div>
         </a>
       </div>
-      <div className="movie__info">
-        <h2 className="movie__name">{movie.nameRU}</h2>
-        <span className="movie__duration">
-          {`${Math.floor(movie.duration/60)}ч ${movie.duration - 60*Math.floor(movie.duration/60) }м`}
+      <div className="movies-card__info">
+        <h2 className="movies-card__name">{movieCard.nameRU}</h2>
+        <span className="movies-card__duration">
+          { movieCard.duration < 60 && `${movieCard.duration}м` }
+
+          {movieCard.duration >= 60 &&
+            `${Math.floor(movieCard.duration/60)}ч ${movieCard.duration - 60*Math.floor(movieCard.duration/60) }м`
+          }
         </ span>
       </div>
     </li>

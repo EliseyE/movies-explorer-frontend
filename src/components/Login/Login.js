@@ -9,7 +9,6 @@ function Login({ onLogIn, message='Что-то пошло не так...' }) {
 
   const navigate = useNavigate();
 
-
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isPasswordValid, setIsPasswordValid] = useState(false);
 

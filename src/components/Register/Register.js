@@ -1,24 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import './Register.css';
 import HelloPage from '../HelloPage/HelloPage';
 import EditFormMain from '../EditFormMain/EditFormMain';
 import InputsRegular from '../InputsRegular/InputsRegular';
 
-function Register({ message='Что-то пошло не так...' }) {
+function Register({ onRegister, message='Что-то пошло не так...' }) {
+
+  const name = useRef();
+  const email = useRef();
+  const password = useRef();
 
   const [isNameValid, setIsNameValid] = useState(true);
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isPasswordValid, setIsPasswordValid] = useState(false);
 
 
-  function handleSubmit(e) {
+
+
+  async function handleSubmit(e) {
     e.preventDefault();
-    // onRegisterUser({
-    //   name,
-    //   email,
-    //   password
-    // });
-  };
+    await onRegister({
+      name: name.current.value,
+      email: email.current.value,
+      password: password.current.value,
+    });
+  }
 
   return(
     <section className='register'>
@@ -47,8 +53,7 @@ function Register({ message='Что-то пошло не так...' }) {
                 required
                 minLength="2"
                 maxLength="40"
-                // value={name || ''}
-                // onChange={handleChageName}
+                ref={name}
               />
             </label>
             <label className="inputs-regular__input-label" >
@@ -62,8 +67,7 @@ function Register({ message='Что-то пошло не так...' }) {
                 required
                 minLength="5"
                 maxLength="30"
-                // value={email || ''}
-                // onChange={handleChageEmail}
+                ref={email}
               />
               </label>
               <label className="inputs-regular__input-label">
@@ -77,7 +81,7 @@ function Register({ message='Что-то пошло не так...' }) {
                   required
                   minLength="4"
                   maxLength="30"
-                // ref={password}
+                ref={password}
                 />
             </label>
           </InputsRegular>
