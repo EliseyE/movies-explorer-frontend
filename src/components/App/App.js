@@ -107,19 +107,18 @@ function markMoviesAsSaved(moveis) {
 
 // TOGGLE MARK MOVIE SAVED\NOT_SAVED
 function toggleMarkMovieAsSaved(movie) {
-  let movies = [...foundMoviesList];
-
-  const movieIndex = movies.findIndex(
-    foundMovie => foundMovie.movieId === movie.movieId);
-
-  if(movies[movieIndex]._id === undefined) {
-    movies[movieIndex] = {...movies[movieIndex], _id: movie._id };
+  if(foundMoviesList.length > 0) {
+    let movies = [...foundMoviesList];
+    const movieIndex = movies.findIndex(
+      foundMovie => foundMovie.movieId === movie.movieId);
+    if(movies[movieIndex]._id === undefined) {
+      movies[movieIndex] = {...movies[movieIndex], _id: movie._id };
+      setFoundMoviesList(movies);
+      return;
+    }
+    movies[movieIndex] = { ...movies[movieIndex], _id: undefined };
     setFoundMoviesList(movies);
-    return;
   }
-
-  movies[movieIndex] = { ...movies[movieIndex], _id: undefined };
-  setFoundMoviesList(movies);
 };
 
 // SEARCHING OF MOVIES
@@ -215,56 +214,68 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
     tokenCheck();
   }, []);
 
-     // AUTHORIZE
-   const handleAuthorize = useCallback( async () => {
+  // AUTHORIZE
+  const handleAuthorize = useCallback( async () => {
     await tokenCheck();
     navigate('/movies', {replace: true});
   }, []);
 
-    // LOGIN
-    async function handleLogIn(logInData) {
-      try {
-        const res = await mainApi.authorize(logInData);
-        console.log(res.resData);
-        if(res.resData) handleAuthorize();
-      } catch (err) {
-        console.log(err);
-      }
-    };
+  // LOGIN
+  async function handleLogIn(logInData) {
+    try {
+      const res = await mainApi.authorize(logInData);
+      console.log(res.resData);
+      if(res.resData) handleAuthorize();
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-    // LOGOUT
-    function handleLogOut() {
-      mainApi.logout();
-      setIsLoggedIn(false);
-      setMoviesList([]);
-      navigate('/', {replace: true});
-    };
+  // LOGOUT
+  function handleLogOut() {
+    mainApi.logout();
+    setIsLoggedIn(false);
+    setMoviesList([]);
+    navigate('/', {replace: true});
+  };
 
-    // SAVE MOVIE
-    async function handleMovieSave(movie) {
-      try {
-        const res = await mainApi.saveMovie(movie);
-        setMoviesSavedList([res.resData, ...moviesSavedList]);
-        toggleMarkMovieAsSaved(res.resData);
-      } catch (err) {
-        console.log(err);
-      }
-    };
+  // SAVE MOVIE
+  async function handleMovieSave(movie) {
+    try {
+      const res = await mainApi.saveMovie(movie);
+      setMoviesSavedList([res.resData, ...moviesSavedList]);
+      toggleMarkMovieAsSaved(res.resData);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-    // DELETE MOVIE FROM SAVED
-    async function handleMovieSavedDelete(movie_Id) {
-      try {
-        const res = await mainApi.deleteSavedMovie(movie_Id);
-        let a = [...moviesSavedList];
-        const deletingMovieIndex = a.findIndex(
-          movie => movie._id === res.resData.movie._id);
-        a.splice(deletingMovieIndex, 1);
-        setMoviesSavedList(a);
-        toggleMarkMovieAsSaved(res.resData.movie);
-      } catch (err) {
-        console.log(err);
-      }
-    };
+  // DELETE MOVIE FROM ARRAY BY MOVIEID
+  function deleteMovieFromList(movie, array) {
+    let list = [...array];
+    const itemIndex = list.findIndex(
+      item => item.movieId === movie.movieId);
+      list.splice(itemIndex, 1);
+    return list;
+  };
+
+  // DELETE MOVIE FROM SAVED
+  async function handleMovieSavedDelete(movie_Id) {
+    try {
+      const res = await mainApi.deleteSavedMovie(movie_Id);
+      const movie = res.resData.movie;
+
+      const updatedMoviesSavedList = deleteMovieFromList(movie, moviesSavedList);
+      setMoviesSavedList(updatedMoviesSavedList);
+
+      const updatedFoundSavedMoviesList = deleteMovieFromList(movie, foundSavedMoviesList);
+      setFoundSavedMoviesList(updatedFoundSavedMoviesList);
+
+      toggleMarkMovieAsSaved(movie);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return(
     <>

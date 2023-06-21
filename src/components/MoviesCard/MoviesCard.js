@@ -25,7 +25,6 @@ function MoviesCard({
   }
 
   function handleDeleteClick() {
-    console.log(movieCard);
     onMovieSavedDelete(movieCard._id);
   }
 
