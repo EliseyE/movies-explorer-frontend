@@ -9,7 +9,8 @@ function Movies({
     foundMovies,
     onMovieSave,
     onMovieSavedDelete,
-    onMoreClick,
+    onMore,
+    isMore,
     onSearchMovies,
     filterState,
     searchQueryState,
@@ -55,8 +56,7 @@ function Movies({
             moviesCardListMod='movies-card-list_place_movies'
           />
         }
-
-          <ButtonGrey text='Ещё' buttonMod='button-grey__place_movies' onClick={onMoreClick} />
+        { isMore && <ButtonGrey text='Ещё' buttonMod='button-grey__place_movies' onClick={onMore} /> }
         </>
       }
       {isLoading && <div className='movies__preloader-container'><Preloader /></div> }

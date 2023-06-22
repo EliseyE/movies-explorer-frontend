@@ -12,6 +12,7 @@ import {
 import {
   getArrayKeyWords,
   searchInArrayByProperties,
+  debounce,
 } from '../../utils/utils'
 
 // API
@@ -59,9 +60,12 @@ function App() {
   const [searchQueryStateSavedMovies, setSearchQueryStateSavedMovies] = useState('');
   const [savedMoviesMessage, setSavedMoviesMessage] = useState('');
 
-// UI
+  // UI
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isMenuNavOpen, setIsMenuNavOpen] = useState(false);
+  const [isMoreMoviesButtonActive, setIsMoreMoviesButtonActive] = useState(false);
+  const [oneMoreMoviesList, setOneMoreMoviesList] = useState([]);
+  const [oneMoreMoviesProterties, setOneMoreMoviesProterties] = useState({ maxInitial: 12, addQuantity: 3, breakPoint: 1216, counter: 0 });
 
 
 // UI FUNCTIONS
@@ -229,6 +233,7 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
 
   useEffect(() => {
     tokenCheck();
+    changeOneMoreButtonProterties();
   }, []);
 
   // AUTHORIZE
@@ -304,6 +309,73 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
     }
   };
 
+// ONE MORE MOVIES
+  function changeOneMoreButtonProterties() {
+    const windowWidth = window.innerWidth;
+
+    if(windowWidth >= 1216)
+      setOneMoreMoviesProterties( {...oneMoreMoviesProterties, maxInitial: 12, addQuantity: 3, breakPoint: 1216 } );
+
+    if((windowWidth < 1216) && (windowWidth > 686))
+      setOneMoreMoviesProterties( {...oneMoreMoviesProterties, maxInitial: 8, addQuantity: 2, breakPoint: 1216 } );
+
+    if(windowWidth <= 686)
+      setOneMoreMoviesProterties( {...oneMoreMoviesProterties, maxInitial: 5, addQuantity: 2, breakPoint: 686 } );
+  }
+
+  const changeWindowWidthCallback = debounce(changeOneMoreButtonProterties, 100);
+
+  // MORE MOVIES ACTION
+  function handleMoreMovies() {
+    const listLength = foundMoviesList.length;
+    const oneMoreMoviesListLength = oneMoreMoviesList.length;
+    const list = [...foundMoviesList];
+
+    const delta = listLength - oneMoreMoviesListLength;
+
+    if(delta <= oneMoreMoviesProterties.addQuantity) {
+      setOneMoreMoviesList([...list]);
+      setIsMoreMoviesButtonActive(false);
+    };
+
+    if(delta > oneMoreMoviesProterties.addQuantity)
+      setOneMoreMoviesList([...list.slice(0 , oneMoreMoviesListLength + oneMoreMoviesProterties.addQuantity )]);
+  };
+
+  useEffect(() => {
+    const listLength = foundMoviesList.length;
+    const oneMoreMoviesListLength = oneMoreMoviesList.length;
+
+    // IS BUTTON MORE EXIST
+    if( (oneMoreMoviesListLength < listLength ) &&
+        (listLength > oneMoreMoviesProterties.maxInitial) )
+      setIsMoreMoviesButtonActive(true);
+    else setIsMoreMoviesButtonActive(false);
+
+    if(oneMoreMoviesListLength === listLength)
+      setIsMoreMoviesButtonActive(false);
+
+    //
+    const list = [...foundMoviesList];
+
+    if( listLength === 0 ) {
+      setOneMoreMoviesList([]);
+    };
+
+    // INITIAL PART
+    if( (oneMoreMoviesListLength === 0) && ( listLength !==0 ) ) {
+      setOneMoreMoviesList([...list.slice(0 , oneMoreMoviesProterties.maxInitial )]);
+    };
+
+    // UPDATE LIST WHEN SAVE/DELETE SAVED
+    if( (oneMoreMoviesListLength > 0) && ( listLength !==0 ) )
+      setOneMoreMoviesList([...list.slice(0 , oneMoreMoviesListLength )]);
+
+  }, [foundMoviesList, oneMoreMoviesProterties]);
+
+  window.addEventListener("resize", changeWindowWidthCallback, false);
+
+
   return(
     <>
     <CurrentUserContext.Provider value={currentUser}>
@@ -330,13 +402,15 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
                 isLoggedIn={isLoggedIn}
               />
               <Movies
-                foundMovies={foundMoviesList}
+                foundMovies={oneMoreMoviesList}
                 onSearchMovies={handleSearchMovies}
                 onMovieSave={handleMovieSave}
                 onMovieSavedDelete={handleMovieSavedDelete}
                 filterState={moviesFilterState}
                 searchQueryState={searchQueryStateMovies}
                 message={moviesMessage}
+                isMore={isMoreMoviesButtonActive}
+                onMore={handleMoreMovies}
               />
               <Footer footerMod='footer_place_page'/>
             </> }
