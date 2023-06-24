@@ -20,7 +20,7 @@ function Profile({
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
   const name = useValidInput('', {isName: true}, {isNotEmpty: true});
-  const email = useValidInput('', {isEmail: true});
+  const email = useValidInput('', {isEmail: true}, {isNotEmpty: true});
 
   function handleEdit() {
     setIsEditMode(!isEditMode);

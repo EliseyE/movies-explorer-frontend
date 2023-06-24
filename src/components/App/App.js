@@ -213,7 +213,7 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
     } catch (err) {
       console.log(err);
     } finally {
-      setIsLoading(true);
+      setIsLoading(false);
     }
   };
 

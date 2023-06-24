@@ -8,9 +8,9 @@ import { useValidInput } from '../../utils/customHooks';
 
 function Register({ onRegister, message='' }) {
 
-  const name = useValidInput('', {isName: true});
-  const email = useValidInput('', {isEmail: true});
-  const password = useValidInput('', {isPassword: true});
+  const name = useValidInput('', {isName: true}, {});
+  const email = useValidInput('', {isEmail: true}, {});
+  const password = useValidInput('', {isPassword: true}, {});
 
   const isLoading = useContext(IsLoadingContext);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);

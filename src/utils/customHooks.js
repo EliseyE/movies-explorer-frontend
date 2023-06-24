@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
 import { useValidation } from "./validation";
 
-const useValidInput = (initialValue, adjusts, validations) => {
+const useValidInput = (initialValue, validations, adjust) => {
   const [value, setValue] = useState(initialValue);
   const [isValid, setIsValid] = useState(false);
   const [isDirty, setDirty] = useState(false);
   const [isBlured, setIsBlured] = useState(false);
   const [isHighlighted, setIsHighlighted] = useState(false);
-
 
   const [validationMessage, setValidationMessage] = useState('');
   const [validationBrowserMessage, setValidationBrowserMessage] = useState('');
@@ -26,7 +25,7 @@ const useValidInput = (initialValue, adjusts, validations) => {
   };
 
   useEffect(() => {
-    if(true) {
+    if(isDirty || isBlured) {
       setValidationMessage('');
       setIsValid(((validationBrowserMessage === '') && valid.isValidCustom) ? true : false);
       setValidationMessage(validationBrowserMessage !== '' ? validationBrowserMessage : valid.errorMessage);
@@ -38,7 +37,7 @@ const useValidInput = (initialValue, adjusts, validations) => {
   }, [isBlured, isValid]);
 
   useEffect(() => {
-    if(adjusts.isNotEmpty) setIsBlured(true);
+    if(adjust.isNotEmpty) setIsBlured(true);
   }, []);
 
   return {

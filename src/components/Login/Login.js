@@ -12,8 +12,8 @@ function Login({ onLogIn, message }) {
   const isLoading = useContext(IsLoadingContext);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
-  const email = useValidInput('', {isEmail: true});
-  const password = useValidInput('', {isPassword: true});
+  const email = useValidInput('', {isEmail: true}, {});
+  const password = useValidInput('', {isPassword: true}, {});
 
   function handleSubmit(e) {
     e.preventDefault();
