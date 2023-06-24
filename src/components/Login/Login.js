@@ -10,10 +10,10 @@ import { useValidInput } from '../../utils/customHooks';
 function Login({ onLogIn, message }) {
 
   const isLoading = useContext(IsLoadingContext);
-  const [isButtonDisabled, setIsButtonDisabled] = useState(true)
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
   const email = useValidInput('', {isEmail: true});
-  const password = useValidInput('');
+  const password = useValidInput('', {isPassword: true});
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -21,7 +21,6 @@ function Login({ onLogIn, message }) {
   };
 
   useEffect(() => {
-    console.log(email.isValid, password.isValid);
       setIsButtonDisabled(!(email.isValid && password.isValid))
   }, [email.isValid, password.isValid]);
 

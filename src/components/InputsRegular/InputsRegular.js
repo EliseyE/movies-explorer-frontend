@@ -19,7 +19,9 @@ function InputsRegular({
             name="inputs-regular-example"
             id="inputs-regular-example"
           />
-          <span className="inputs-regular__input-error user-name-error">Сообщение от валидатора</span>
+          <span className={`inputs-regular__input-error user-name-error ${'name.isHighlighted' && 'inputs-regular__input-error_highlighted'}`}>
+            {'Сообщение валидации name.validationMessage'}
+          </span>
         </label> }
         {children}
     </fieldset>

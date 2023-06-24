@@ -1,19 +1,23 @@
 import { useState, useEffect } from "react";
 import { useValidation } from "./validation";
 
-const useValidInput = (initialValue, validations) => {
+const useValidInput = (initialValue, adjusts, validations) => {
   const [value, setValue] = useState(initialValue);
+  const [isValid, setIsValid] = useState(false);
   const [isDirty, setDirty] = useState(false);
   const [isBlured, setIsBlured] = useState(false);
-  const [isValid, setIsValid] = useState(false);
   const [isHighlighted, setIsHighlighted] = useState(false);
+
+
   const [validationMessage, setValidationMessage] = useState('');
+  const [validationBrowserMessage, setValidationBrowserMessage] = useState('');
 
   const valid = useValidation(value, validations);
 
   function onChange(e) {
+    setValidationMessage('');
     setValue(e.target.value);
-    setValidationMessage(e.target.validationMessage);
+    setValidationBrowserMessage(e.target.validationMessage);
     setDirty(true);
   };
 
@@ -22,9 +26,10 @@ const useValidInput = (initialValue, validations) => {
   };
 
   useEffect(() => {
-    if(isDirty) {
-      setIsValid(((validationMessage === '') && valid.isValidCustom) ? true : false);
-      setValidationMessage(validationMessage !== '' ? validationMessage : valid.errorMessage);
+    if(true) {
+      setValidationMessage('');
+      setIsValid(((validationBrowserMessage === '') && valid.isValidCustom) ? true : false);
+      setValidationMessage(validationBrowserMessage !== '' ? validationBrowserMessage : valid.errorMessage);
     }
   }, [value, isDirty, valid, validationMessage]);
 
@@ -32,6 +37,9 @@ const useValidInput = (initialValue, validations) => {
     setIsHighlighted(!isValid && isBlured);
   }, [isBlured, isValid]);
 
+  useEffect(() => {
+    if(adjusts.isNotEmpty) setIsBlured(true);
+  }, []);
 
   return {
     isEmail: valid.isEmail,
@@ -43,6 +51,7 @@ const useValidInput = (initialValue, validations) => {
     isHighlighted,
     onChange,
     onBlur,
+    setValue,
     valid
   };
 };

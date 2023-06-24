@@ -1,32 +1,32 @@
-import React, { useState, useRef, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import './Register.css';
 import HelloPage from '../HelloPage/HelloPage';
 import EditFormMain from '../EditFormMain/EditFormMain';
 import InputsRegular from '../InputsRegular/InputsRegular';
 import { IsLoadingContext } from '../../contexts/IsLoadingContext';
+import { useValidInput } from '../../utils/customHooks';
 
-function Register({ onRegister, message='Что-то пошло не так...' }) {
+function Register({ onRegister, message='' }) {
 
-  const name = useRef();
-  const email = useRef();
-  const password = useRef();
+  const name = useValidInput('', {isName: true});
+  const email = useValidInput('', {isEmail: true});
+  const password = useValidInput('', {isPassword: true});
 
   const isLoading = useContext(IsLoadingContext);
-  const [isNameValid, setIsNameValid] = useState(true);
-  const [isEmailValid, setIsEmailValid] = useState(true);
-  const [isPasswordValid, setIsPasswordValid] = useState(false);
-
-
-
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
   async function handleSubmit(e) {
     e.preventDefault();
     await onRegister({
-      name: name.current.value,
-      email: email.current.value,
-      password: password.current.value,
+      name: name.value,
+      email: email.value,
+      password: password.value,
     });
-  }
+  };
+
+  useEffect(() => {
+    setIsButtonDisabled(!(name.isValid && email.isValid && password.isValid))
+}, [email.isValid, password.isValid, name.isValid]);
 
   return(
     <section className='register'>
@@ -42,26 +42,31 @@ function Register({ onRegister, message='Что-то пошло не так...' 
           message={message}
           formMod='edit-form__place_register'
           buttonText={isLoading ? 'Создание аккаунта...' : 'Зарегистрироваться'}
+          buttonIsDisabled={isButtonDisabled}
         >
           <InputsRegular>
             <label className="inputs-regular__input-label">
               <span className='inputs-regular__input-name' >Имя</span>
               <input
-                className={`inputs-regular__input profile__input_kind_name ${!isNameValid && 'inputs-regular__input_invalid'}`}
+                className={`inputs-regular__input profile__input_kind_name ${name.isHighlighted && 'inputs-regular__input_invalid'}`}
                 placeholder=""
                 type="text"
                 name="profile-name"
                 id="profile-name"
                 required
                 minLength="2"
-                maxLength="40"
-                ref={name}
+                maxLength="30"
+                onChange={name.onChange}
+                onBlur={name.onBlur}
               />
+              <span className={`inputs-regular__input-error user-email-error ${name.isHighlighted && 'inputs-regular__input-error_highlighted'}`}>
+                {name.validationMessage}
+              </span>
             </label>
             <label className="inputs-regular__input-label" >
               <span className='inputs-regular__input-name' >E-mail</span>
               <input
-                className={`inputs-regular__input profile__input_kind_user-email ${!isEmailValid && 'inputs-regular__input_invalid'}`}
+                className={`inputs-regular__input profile__input_kind_user-email ${email.isHighlighted && 'inputs-regular__input_invalid'}`}
                 placeholder=""
                 type="email"
                 name="user-email"
@@ -69,13 +74,17 @@ function Register({ onRegister, message='Что-то пошло не так...' 
                 required
                 minLength="5"
                 maxLength="30"
-                ref={email}
+                onChange={email.onChange}
+                onBlur={email.onBlur}
               />
+                <span className={`inputs-regular__input-error user-email-error ${email.isHighlighted && 'inputs-regular__input-error_highlighted'}`}>
+                 {email.validationMessage}
+                </span>
               </label>
               <label className="inputs-regular__input-label">
-              <span className='inputs-regular__input-name' >Пароль</span>
+                <span className='inputs-regular__input-name' >Пароль</span>
                 <input
-                  className={`inputs-regular__input profile__input_kind_user-password ${!isPasswordValid && 'inputs-regular__input_invalid'}`}
+                  className={`inputs-regular__input profile__input_kind_user-password ${password.isHighlighted && 'inputs-regular__input_invalid'}`}
                   placeholder=""
                   type="password"
                   name="password"
@@ -83,8 +92,12 @@ function Register({ onRegister, message='Что-то пошло не так...' 
                   required
                   minLength="4"
                   maxLength="30"
-                ref={password}
+                  onChange={password.onChange}
+                  onBlur={password.onBlur}
                 />
+                <span className={`inputs-regular__input-error user-password-error ${password.isHighlighted && 'inputs-regular__input-error_highlighted'}`}>
+                  {password.validationMessage}
+                </span>
             </label>
           </InputsRegular>
         </EditFormMain>

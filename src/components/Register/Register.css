@@ -1,8 +1,11 @@
 .register {
   margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: fit-content;
+  width: 396px;
+}
+
+
+@media screen and (max-width: 540px) {
+  .login {
+    width: 260px;
+  }
 }

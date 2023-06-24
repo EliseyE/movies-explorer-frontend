@@ -19,6 +19,9 @@ function InputsInternal({
             name="inputs-internal-example"
             id="inputs-internal-example"
           />
+          <span className={`inputs-internal__input-error user-email-error ${'name.isHighlighted' && 'inputs-internal__input-error_highlighted'}`}>
+            {`Сообщение валидации name.validationMessage`}
+          </span>
         </label> }
         {children}
     </fieldset>
