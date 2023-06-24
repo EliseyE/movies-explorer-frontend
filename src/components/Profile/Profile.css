@@ -31,6 +31,15 @@
   margin-top: 3px;
 }
 
+.profile__preloader-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, .05);
+}
+
 @media screen and (max-width: 768px) {
   .profile {
     padding-top: 236px;

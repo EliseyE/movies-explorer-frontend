@@ -1,8 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext } from 'react';
 import './Register.css';
 import HelloPage from '../HelloPage/HelloPage';
 import EditFormMain from '../EditFormMain/EditFormMain';
 import InputsRegular from '../InputsRegular/InputsRegular';
+import { IsLoadingContext } from '../../contexts/IsLoadingContext';
 
 function Register({ onRegister, message='Что-то пошло не так...' }) {
 
@@ -10,6 +11,7 @@ function Register({ onRegister, message='Что-то пошло не так...' 
   const email = useRef();
   const password = useRef();
 
+  const isLoading = useContext(IsLoadingContext);
   const [isNameValid, setIsNameValid] = useState(true);
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isPasswordValid, setIsPasswordValid] = useState(false);
@@ -39,7 +41,7 @@ function Register({ onRegister, message='Что-то пошло не так...' 
           onSubmit={handleSubmit}
           message={message}
           formMod='edit-form__place_register'
-          buttonText='Зарегистрироваться'
+          buttonText={isLoading ? 'Создание аккаунта...' : 'Зарегистрироваться'}
         >
           <InputsRegular>
             <label className="inputs-regular__input-label">

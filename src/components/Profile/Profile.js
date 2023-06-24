@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
 import './Profile.css';
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
-import { useNavigate } from 'react-router-dom';
 import EditFormMain from '../EditFormMain/EditFormMain';
 import ButtonText from '../ButtonText/ButtonText';
 import ButtonTextRed from '../ButtonTextRed/ButtonTextRed';
 import InputsInternal from '../InputsInternal/InputsInternal'
-
+import { IsLoadingContext } from '../../contexts/IsLoadingContext';
+import Preloader from '../Preloader/Preloader';
 
 function Profile({
   onUpdateUser,
@@ -14,7 +14,7 @@ function Profile({
   message='При обновлении профиля произошла ошибка.' }) {
 
   const currentUser = useContext(CurrentUserContext);
-  const navigate = useNavigate();
+  const isLoading = useContext(IsLoadingContext);
 
   const [name, setName] = useState(currentUser.name);
   const [email, setEmail] = useState(currentUser.email);
@@ -49,8 +49,11 @@ function Profile({
       name,
       email
     });
-    setIsEditMode(false);
   };
+
+  useEffect(() => {
+    if(!isLoading) setIsEditMode(false);
+  }, [isLoading]);
 
   return(
     <section className='profile'>
@@ -63,6 +66,7 @@ function Profile({
         buttonIsDisabled={isValid}
         titleMod='profile__title'
         messageMod='profile__message'
+        buttonText={isLoading ? 'Сохранение...' : 'Сохранить' }
 
       >
         <InputsInternal>
@@ -101,7 +105,7 @@ function Profile({
         </InputsInternal>
 
         <div className='profile__actions-container'>
-          { !isEditMode &&
+          { !isEditMode && !isLoading &&
             <>
               <ButtonText
                 text='Редактировать'
@@ -116,6 +120,7 @@ function Profile({
             </>}
         </div>
       </EditFormMain>
+      {isLoading && <div className='profile__preloader-container'><Preloader /></div> }
     </section>
   );
 }

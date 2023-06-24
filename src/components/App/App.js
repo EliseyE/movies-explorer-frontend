@@ -30,15 +30,19 @@ import SavedMovies from '../SavedMovies/SavedMovies';
 import Profile from '../Profile/Profile';
 import Register from '../Register/Register';
 import Login from '../Login/Login';
+import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 
 // CONTEXT
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
+import { IsLoadingContext } from '../../contexts/IsLoadingContext';
+import Preloader from '../Preloader/Preloader';
 
 function App() {
 
 // UTILS
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
 
   const navigate = useNavigate();
 
@@ -131,7 +135,8 @@ function toggleMarkMovieAsSaved(movie) {
 // SEARCHING OF MOVIES
 async function handleSearchMovies(searchQuery, filterValue) {
   setFoundMoviesList([]);
-    let movies = [];
+  let movies = [];
+  setIsLoading(true);
   try {
     movies = await handleGetMovies();
   } catch(err) {
@@ -153,6 +158,7 @@ async function handleSearchMovies(searchQuery, filterValue) {
     setFoundMoviesList(foundMovies);
 
     if(foundMovies.length === 0) setMoviesMessage('Ничего не найдено');
+    setIsLoading(false);
 };
 
 // SEARCHING OF SAVED MOVIES
@@ -199,12 +205,15 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
 // MOVIES EXPLORER API
   // REGISTER
   async function handleRegister(regData) {
+    setIsLoading(true);
     try {
       const res = await mainApi.register(regData);
       navigate('/signin', { replace: true });
       console.log(res.resData);
     } catch (err) {
       console.log(err);
+    } finally {
+      setIsLoading(true);
     }
   };
 
@@ -226,8 +235,9 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
       }
     } catch (err) {
       console.log(err);
+      setIsInitialLoading(false);
     } finally {
-      setIsLoading(false);
+      setIsInitialLoading(false);
     }
   }, []);
 
@@ -240,25 +250,33 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
   const handleAuthorize = useCallback( async () => {
     await tokenCheck();
     navigate('/movies', {replace: true});
+    setIsLoading(false);
   }, []);
 
   // LOGIN
   async function handleLogIn(logInData) {
+      setIsLoading(true);
     try {
       const res = await mainApi.authorize(logInData);
-      console.log(res.resData);
       if(res.resData) handleAuthorize();
     } catch (err) {
       console.log(err);
     }
-  };
+  }
 
   // LOGOUT
-  function handleLogOut() {
-    mainApi.logout();
-    setIsLoggedIn(false);
-    setMoviesList([]);
-    navigate('/', {replace: true});
+  async function handleLogOut() {
+    setIsLoading(true);
+    try {
+      await mainApi.logout();
+      setIsLoggedIn(false);
+      setMoviesList([]);
+      navigate('/', {replace: true});
+    } catch(err) {
+      console.log(err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // SAVE MOVIE
@@ -301,11 +319,14 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
 
   // UPDATE PROFILE INFO
   async function handleUpdateUserInfo(userData) {
+  setIsLoading(true);
     try {
       const res = await mainApi.updateUserInfo(userData);
       setCurrentUser({ ...currentUser, ...res.resData });
     } catch (err) {
       console.log(err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -375,92 +396,86 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
 
   window.addEventListener("resize", changeWindowWidthCallback, false);
 
+  // LOADING SPINNER
+  if(isInitialLoading)
+    return <Preloader />;
 
   return(
     <>
     <CurrentUserContext.Provider value={currentUser}>
-      <div className='page'>
-        <Routes>
-          <Route path='/' element={
-            <>
-              <Header
-                headerMod='header_place_page'
-                buttonMenuNavClick={handleMenuNavClick}
-                isLoggedIn={isLoggedIn}
-                isColored={true}
-              />
-              <Main />
-              <Footer footerMod='footer_place_page'/>
-            </> }
-          />
-
-          <Route path='/movies' element={
-            <>
-              <Header
-                headerMod='header_place_page'
-                buttonMenuNavClick={handleMenuNavClick}
-                isLoggedIn={isLoggedIn}
-              />
-              <Movies
-                foundMovies={oneMoreMoviesList}
-                onSearchMovies={handleSearchMovies}
-                onMovieSave={handleMovieSave}
-                onMovieSavedDelete={handleMovieSavedDelete}
-                filterState={moviesFilterState}
-                searchQueryState={searchQueryStateMovies}
-                message={moviesMessage}
-                isMore={isMoreMoviesButtonActive}
-                onMore={handleMoreMovies}
-              />
-              <Footer footerMod='footer_place_page'/>
-            </> }
-          />
-
-          <Route path='/saved-movies' element={
-            <>
+      <IsLoadingContext.Provider value={isLoading}>
+        <div className='page'>
+          {
+            ( window.location.pathname !== '/signin' &&
+              window.location.pathname !== '/signup') &&
             <Header
-              headerMod='header_place_page'
-              buttonMenuNavClick={handleMenuNavClick}
-              isLoggedIn={isLoggedIn}
-            />
-            <SavedMovies
-              moviesList={ searchQueryStateSavedMovies !== '' ? foundSavedMoviesList : moviesSavedList}
-              onSearchMovies={handleSearchSavedMovies}
-              onMovieSavedDelete={handleMovieSavedDelete}
-              filterState={savedMoviesFilterState}
-              searchQueryState={searchQueryStateSavedMovies}
-              message={savedMoviesMessage}
-            />
-            <Footer footerMod='footer_place_page'/>
-            </> }
-          />
+            headerMod='header_place_page'
+            buttonMenuNavClick={handleMenuNavClick}
+            isLoggedIn={isLoggedIn}
+            isColored={window.location.pathname === '/'}
+          />}
+          <div className='page__content'>
+            <Routes  >
+              <Route path='/' element={<Main />} />
 
-          <Route path='/profile' element={
-            <>
-            <Header
-              headerMod='header_place_page'
-              buttonMenuNavClick={handleMenuNavClick}
-              isLoggedIn={isLoggedIn}
-            />
-            <Profile
-              onUpdateUser={handleUpdateUserInfo}
-              onLogOut={handleLogOut}
-            />
-            </> }
-          />
+              <Route path='/movies' element={
+                <>
+                <ProtectedRoute
+                  isLoggedIn={isLoggedIn}
+                  element={Movies}
+                    foundMovies={oneMoreMoviesList}
+                    onSearchMovies={handleSearchMovies}
+                    onMovieSave={handleMovieSave}
+                    onMovieSavedDelete={handleMovieSavedDelete}
+                    filterState={moviesFilterState}
+                    searchQueryState={searchQueryStateMovies}
+                    message={moviesMessage}
+                    isMore={isMoreMoviesButtonActive}
+                    onMore={handleMoreMovies}
+                /> </>}
+              />
 
-          <Route path='/signup' element={ <Register onRegister={handleRegister}  /> } />
-          <Route path='/signin' element={ <Login onLogIn={handleLogIn} /> } />
+              <Route path='/saved-movies' element={
+                <ProtectedRoute
+                  isLoggedIn={isLoggedIn}
+                  element={SavedMovies}
+                    moviesList={
+                      searchQueryStateSavedMovies !== ''
+                      ? foundSavedMoviesList : moviesSavedList}
+                    onSearchMovies={handleSearchSavedMovies}
+                    onMovieSavedDelete={handleMovieSavedDelete}
+                    filterState={savedMoviesFilterState}
+                    searchQueryState={searchQueryStateSavedMovies}
+                    message={savedMoviesMessage}
+                />}
+              />
 
-          <Route path="/*" element={
-            <>
-              <Navigate to="/404" replace={true} />
-              <NotFoundPage className='not-found-page_place_page' />
-            </> }
-          />
+              <Route path='/profile' element={
+                <ProtectedRoute
+                  isLoggedIn={isLoggedIn}
+                  element={Profile}
+                    onUpdateUser={handleUpdateUserInfo}
+                    onLogOut={handleLogOut}
+                />}
+              />
 
-        </Routes>
-      </div>
+              <Route path='/signup' element={isLoggedIn ? <Navigate to="/movies" replace /> :  <Register onRegister={handleRegister}  /> } />
+              <Route path='/signin' element={isLoggedIn ? <Navigate to="/movies" replace /> :  <Login onLogIn={handleLogIn} /> } />
+
+              <Route path="/*" element={
+                <>
+                  <Navigate to="/404" replace={true} />
+                  <NotFoundPage className='not-found-page_place_page' />
+                </> }
+              />
+            </Routes>
+          </div>
+           {( window.location.pathname !== '/signin' &&
+              window.location.pathname !== '/signup' &&
+              window.location.pathname !== '/profile' ) &&
+              <Footer footerMod='footer_place_page'/> }
+        </div>
+      </IsLoadingContext.Provider>
     </CurrentUserContext.Provider>
 
       <PopupMenuNav

@@ -19,6 +19,7 @@ function InputsRegular({
             name="inputs-regular-example"
             id="inputs-regular-example"
           />
+          <span className="inputs-regular__input-error user-name-error">Сообщение от валидатора</span>
         </label> }
         {children}
     </fieldset>

@@ -122,3 +122,63 @@ const testUser = {
 };
 
 export { dataArray, singleMovie, dataArraySaved, testUser };
+
+
+
+
+
+     {/* <Route path='/movies' element={
+              <>
+                <Header
+                  headerMod='header_place_page'
+                  buttonMenuNavClick={handleMenuNavClick}
+                  isLoggedIn={isLoggedIn}
+                />
+                <Movies
+                  foundMovies={oneMoreMoviesList}
+                  onSearchMovies={handleSearchMovies}
+                  onMovieSave={handleMovieSave}
+                  onMovieSavedDelete={handleMovieSavedDelete}
+                  filterState={moviesFilterState}
+                  searchQueryState={searchQueryStateMovies}
+                  message={moviesMessage}
+                  isMore={isMoreMoviesButtonActive}
+                  onMore={handleMoreMovies}
+                />
+
+                <Footer footerMod='footer_place_page'/>
+              </> }
+            /> */}
+
+            {/* <Route path='/saved-movies' element={
+              <>
+              <Header
+                headerMod='header_place_page'
+                buttonMenuNavClick={handleMenuNavClick}
+                isLoggedIn={isLoggedIn}
+              />
+              <SavedMovies
+                moviesList={ searchQueryStateSavedMovies !== '' ? foundSavedMoviesList : moviesSavedList}
+                onSearchMovies={handleSearchSavedMovies}
+                onMovieSavedDelete={handleMovieSavedDelete}
+                filterState={savedMoviesFilterState}
+                searchQueryState={searchQueryStateSavedMovies}
+                message={savedMoviesMessage}
+              />
+              <Footer footerMod='footer_place_page'/>
+              </> }
+            /> */}
+
+            {/* <Route path='/profile' element={
+              <>
+              <Header
+                headerMod='header_place_page'
+                buttonMenuNavClick={handleMenuNavClick}
+                isLoggedIn={isLoggedIn}
+              />
+              <Profile
+                onUpdateUser={handleUpdateUserInfo}
+                onLogOut={handleLogOut}
+              />
+              </> }
+            /> */}

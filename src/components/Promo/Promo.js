@@ -3,6 +3,7 @@ import './Promo.css';
 import {
   PROMO_TITLE_TEXT,
   PROMO_TEXT,
+  PROMO_IMG_PATH,
 } from './constants.js';
 import NavTab from '../NavTab/NavTab';
 
@@ -15,7 +16,10 @@ function Promo({promoMod=''}) {
         <p className='promo__text'>{PROMO_TEXT}</p>
         <NavTab />
       </div>
-      <div className='promo__image' />
+      <div
+        className='promo__image'
+        style={{ backgroundImage: `url('${PROMO_IMG_PATH}')` }}
+      />
     </section>
   );
 }
