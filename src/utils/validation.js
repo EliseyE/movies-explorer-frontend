@@ -26,7 +26,7 @@ const useValidation = (value , validations) => {
           break;
 
         case 'isName':
-          const regExpName = /^[a-zA-Zа-яА-ЯёЁ][a-zA-Zа-яА-ЯёЁ0-9-\_\.\-]{1,29}$/;
+          const regExpName = /^[a-zA-Zа-яА-ЯёЁ]([ ]?[a-zA-Zа-яА-ЯёЁ0-9-\_\.\-]){1,29}$/;
           regExpName.test(String(value).toLowerCase())
           ? setIsName({...isName , isValid: false, message: ''})
           : setIsName({...isName , isValid: true, message: 'Введены недопустимые символы ' });
