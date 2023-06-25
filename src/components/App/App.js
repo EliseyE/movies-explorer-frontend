@@ -230,7 +230,6 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
     try {
       const res = await mainApi.register(regData);
       navigate('/signin', { replace: true });
-      console.log(res);
       handleUpdateLastResponse(res);
       handleOpenPopupResult(res.resValues.ok);
     } catch (err) {
