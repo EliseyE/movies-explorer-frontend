@@ -2,8 +2,11 @@
 
 import { MOVIES_EXPLORER_BASE_URL_API } from "../appConfig";
 
+export let lastResponse = {};
+
 async function responceProcessing(res) {
   const resData = await res.json();
+  lastResponse = { resOk: res.ok, resStatus: res.status , resMessage: resData.message };
 
   if(res.ok)
     return {resValues: res, resData: resData};

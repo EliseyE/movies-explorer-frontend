@@ -43,6 +43,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [apiResponse, setApiResponse] = useState({ resOk: false, resStatus: '' , resMessage: '' });
 
   const navigate = useNavigate();
 
@@ -209,9 +210,16 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
     try {
       const res = await mainApi.register(regData);
       navigate('/signin', { replace: true });
-      console.log(res.resData);
+      handleUpdateLastResponse(res);
     } catch (err) {
       console.log(err);
+      if (!err.resValues.ok && (err.resValues.status !== 409)) {
+        setApiResponse({
+          ...apiResponse,
+          resOk: err.resValues.ok,
+          resStatus: err.resValues.status,
+          resMessage: 'При регистрации пользователя произошла ошибка'});
+      } else handleUpdateLastResponse(err);
     } finally {
       setIsLoading(false);
     }
@@ -222,12 +230,12 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
     try {
       const jwtCheckRes = await mainApi.checkTokenAPI();
       if(!jwtCheckRes.resData._id)
-        throw new Error('JWT is empty');
+        throw new Error('JWT IS EMPTY');
       const resUser = await mainApi.getUserInfo();
       if(resUser) {
         setIsLoggedIn(true);
         setCurrentUser({ ...currentUser, ...resUser.resData });
-        console.log('jwt check!')
+        console.log('>>> JWT CHECKED')
       }
       const resSavedMovies = await mainApi.getSavedMovies();
       if(resSavedMovies) {
@@ -259,10 +267,14 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
     try {
       const res = await mainApi.authorize(logInData);
       if(res.resData) handleAuthorize();
+      handleUpdateLastResponse(res);
     } catch (err) {
       console.log(err);
+      handleUpdateLastResponse(err);
+    } finally {
+      setIsLoading(false);
     }
-  }
+  };
 
   // LOGOUT
   async function handleLogOut() {
@@ -323,11 +335,28 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
     try {
       const res = await mainApi.updateUserInfo(userData);
       setCurrentUser({ ...currentUser, ...res.resData });
+      handleUpdateLastResponse(res);
     } catch (err) {
-      console.log(err);
+      if (!err.resValues.ok && (err.resValues.status !== 409))
+        setApiResponse({
+          ...apiResponse,
+          resOk: err.resValues.ok,
+          resStatus: err.resValues.status,
+          resMessage: 'При обновлении профиля произошла ошибка'});
+      else handleUpdateLastResponse(err);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  // UPDATE LAST RESPONSE RECORD
+  function handleUpdateLastResponse(res) {
+    setApiResponse({
+      ...apiResponse,
+      resOk: res.resValues.ok,
+      resStatus: res.resValues.status,
+      resMessage: res.resData.message
+    });
   };
 
 // ONE MORE MOVIES
@@ -407,7 +436,8 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
         <div className='page'>
           {
             ( window.location.pathname !== '/signin' &&
-              window.location.pathname !== '/signup') &&
+              window.location.pathname !== '/signup' &&
+              window.location.pathname !== '/404' ) &&
             <Header
             headerMod='header_place_page'
             buttonMenuNavClick={handleMenuNavClick}
@@ -456,11 +486,26 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
                   element={Profile}
                     onUpdateUser={handleUpdateUserInfo}
                     onLogOut={handleLogOut}
+                    apiResponse={apiResponse}
                 />}
               />
 
-              <Route path='/signup' element={isLoggedIn ? <Navigate to="/movies" replace /> :  <Register onRegister={handleRegister}  /> } />
-              <Route path='/signin' element={isLoggedIn ? <Navigate to="/movies" replace /> :  <Login onLogIn={handleLogIn} /> } />
+              <Route path='/signup'
+                element={isLoggedIn
+                ? <Navigate to="/movies" replace />
+                :  <Register
+                    onRegister={handleRegister}
+                    message={apiResponse.resMessage}
+                  /> }
+              />
+              <Route path='/signin'
+                element={isLoggedIn
+                  ? <Navigate to="/movies" replace />
+                  : <Login
+                      onLogIn={handleLogIn}
+                      message={apiResponse.resMessage}
+                    /> }
+              />
 
               <Route path="/*" element={
                 <>
@@ -472,7 +517,8 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
           </div>
            {( window.location.pathname !== '/signin' &&
               window.location.pathname !== '/signup' &&
-              window.location.pathname !== '/profile' ) &&
+              window.location.pathname !== '/profile' &&
+              window.location.pathname !== '/404' ) &&
               <Footer footerMod='footer_place_page'/> }
         </div>
       </IsLoadingContext.Provider>

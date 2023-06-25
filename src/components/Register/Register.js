@@ -7,6 +7,7 @@ import { IsLoadingContext } from '../../contexts/IsLoadingContext';
 import { useValidInput } from '../../utils/customHooks';
 
 function Register({ onRegister, message='' }) {
+  const [isRequest, setIsRequest] = useState(false);
 
   const name = useValidInput('', {isName: true}, {});
   const email = useValidInput('', {isEmail: true}, {});
@@ -22,6 +23,7 @@ function Register({ onRegister, message='' }) {
       email: email.value,
       password: password.value,
     });
+    setIsRequest(true);
   };
 
   useEffect(() => {
@@ -39,7 +41,7 @@ function Register({ onRegister, message='' }) {
           title='Добро пожаловать!'
           name='register'
           onSubmit={handleSubmit}
-          message={message}
+          message={isRequest && message}
           formMod='edit-form__place_register'
           buttonText={isLoading ? 'Создание аккаунта...' : 'Зарегистрироваться'}
           buttonIsDisabled={isButtonDisabled}

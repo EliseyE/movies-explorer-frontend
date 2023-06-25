@@ -7,23 +7,24 @@ import { IsLoadingContext } from '../../contexts/IsLoadingContext';
 import { useValidInput } from '../../utils/customHooks';
 
 
-function Login({ onLogIn, message }) {
+function Login({ onLogIn, message='' }) {
 
   const isLoading = useContext(IsLoadingContext);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const [isRequest, setIsRequest] = useState(false);
 
   const email = useValidInput('', {isEmail: true}, {});
   const password = useValidInput('', {isPassword: true}, {});
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    onLogIn({ password: password.value, email: email.value });
+    await onLogIn({ password: password.value, email: email.value });
+    setIsRequest(true);
   };
 
   useEffect(() => {
       setIsButtonDisabled(!(email.isValid && password.isValid))
   }, [email.isValid, password.isValid]);
-
 
   return(
     <section className='login'>
@@ -36,7 +37,7 @@ function Login({ onLogIn, message }) {
           title='Рады видеть!'
           name='login'
           onSubmit={handleSubmit}
-          message={message}
+          message={isRequest && message}
           formMod='edit-form__place_login'
           buttonText={isLoading ? 'Вход...' : 'Войти'}
           buttonIsDisabled={isButtonDisabled}

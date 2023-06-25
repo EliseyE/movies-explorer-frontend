@@ -12,12 +12,13 @@ import { useValidInput } from '../../utils/customHooks';
 function Profile({
   onUpdateUser,
   onLogOut,
-  message='' }) {
+  apiResponse={ resOk: false, resStatus: '' , resMessage: '' } }) {
 
   const currentUser = useContext(CurrentUserContext);
   const isLoading = useContext(IsLoadingContext);
   const [isEditMode, setIsEditMode] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const [isRequest, setIsRequest] = useState(false);
 
   const name = useValidInput('', {isName: true}, {isNotEmpty: true});
   const email = useValidInput('', {isEmail: true}, {isNotEmpty: true});
@@ -29,22 +30,29 @@ function Profile({
   useEffect(() => {
     name.setValue(currentUser.name);
     email.setValue(currentUser.email);
-  }, []);
+  }, [currentUser, isEditMode]);
 
   useEffect(() => {
     setIsEditMode(false);
   }, []);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    onUpdateUser({
-      name: name.value,
-      email: email.value
-    });
+    if((currentUser.name !== name.value) || (currentUser.email !== email.value)) {
+      await onUpdateUser({
+        name: name.value,
+        email: email.value
+      });
+      setIsRequest(true);
+    } else setIsEditMode(false);
   };
 
   useEffect(() => {
-    if(!isLoading) setIsEditMode(false);
+    setIsRequest(false);
+  }, [isEditMode]);
+
+  useEffect(() => {
+    if(apiResponse.resOk && isRequest) setIsEditMode(false);
   }, [isLoading]);
 
   useEffect(() => {
@@ -57,7 +65,7 @@ function Profile({
         title={`Привет, ${currentUser.name}!`}
         name='profile'
         onSubmit={handleSubmit}
-        message={message}
+        message={isRequest && apiResponse.resMessage}
         buttinIsHidden={isEditMode}
         titleMod='profile__title'
         messageMod='profile__message'
