@@ -2,6 +2,10 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import './App.css';
 
+// IMAGES
+import imageSuccess from '../../images/icons/image-success.svg';
+import imageFail from '../../images/icons/image-fail.svg';
+
 // CONFIG
 import {
   BEATFILM_MOVIES_BASE_URL_API,
@@ -31,6 +35,7 @@ import Profile from '../Profile/Profile';
 import Register from '../Register/Register';
 import Login from '../Login/Login';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
+import PopupResult from '../PopupResult/PopupResult';
 
 // CONTEXT
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
@@ -68,6 +73,8 @@ function App() {
   // UI
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isMenuNavOpen, setIsMenuNavOpen] = useState(false);
+  const [isPopupResultOpen, setIsPopupResultOpen] = useState(false);
+  const [popupResultImage, setPopupResultImage] = useState('');
   const [isMoreMoviesButtonActive, setIsMoreMoviesButtonActive] = useState(false);
   const [oneMoreMoviesList, setOneMoreMoviesList] = useState([]);
   const [oneMoreMoviesProterties, setOneMoreMoviesProterties] = useState({ maxInitial: 12, addQuantity: 3, breakPoint: 1216, counter: 0 });
@@ -83,7 +90,20 @@ function App() {
   function closeAllPopups() {
     setIsPopupOpen(false);
     setIsMenuNavOpen(false);
+
+    setIsPopupResultOpen(false);
+    setTimeout(() => {
+     setPopupResultImage('');
+    }, 200);
   };
+
+  function handleOpenPopupResult(resOk) {
+    setIsPopupOpen(true);
+    setPopupResultImage(resOk ? imageSuccess : imageFail );
+    setTimeout(() => {
+      setIsPopupResultOpen(true);
+     }, 200);
+  }
 
   // CLICK ESC TO CLOSE POPUP
   useEffect(() => {
@@ -210,7 +230,9 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
     try {
       const res = await mainApi.register(regData);
       navigate('/signin', { replace: true });
+      console.log(res);
       handleUpdateLastResponse(res);
+      handleOpenPopupResult(res.resValues.ok);
     } catch (err) {
       console.log(err);
       if (!err.resValues.ok && (err.resValues.status !== 409)) {
@@ -431,102 +453,109 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
 
   return(
     <>
-    <CurrentUserContext.Provider value={currentUser}>
-      <IsLoadingContext.Provider value={isLoading}>
-        <div className='page'>
-          {
-            ( window.location.pathname !== '/signin' &&
-              window.location.pathname !== '/signup' &&
-              window.location.pathname !== '/404' ) &&
-            <Header
-            headerMod='header_place_page'
-            buttonMenuNavClick={handleMenuNavClick}
-            isLoggedIn={isLoggedIn}
-            isColored={window.location.pathname === '/'}
-          />}
-          <div className='page__content'>
-            <Routes  >
-              <Route path='/' element={<Main />} />
+      <CurrentUserContext.Provider value={currentUser}>
+        <IsLoadingContext.Provider value={isLoading}>
+          <div className='page'>
+            {
+              ( window.location.pathname !== '/signin' &&
+                window.location.pathname !== '/signup' &&
+                window.location.pathname !== '/404' ) &&
+              <Header
+              headerMod='header_place_page'
+              buttonMenuNavClick={handleMenuNavClick}
+              isLoggedIn={isLoggedIn}
+              isColored={window.location.pathname === '/'}
+            />}
+            <div className='page__content'>
+              <Routes  >
+                <Route path='/' element={<Main />} />
 
-              <Route path='/movies' element={
-                <>
-                <ProtectedRoute
-                  isLoggedIn={isLoggedIn}
-                  element={Movies}
-                    foundMovies={oneMoreMoviesList}
-                    onSearchMovies={handleSearchMovies}
-                    onMovieSave={handleMovieSave}
-                    onMovieSavedDelete={handleMovieSavedDelete}
-                    filterState={moviesFilterState}
-                    searchQueryState={searchQueryStateMovies}
-                    message={moviesMessage}
-                    isMore={isMoreMoviesButtonActive}
-                    onMore={handleMoreMovies}
-                /> </>}
-              />
+                <Route path='/movies' element={
+                  <>
+                  <ProtectedRoute
+                    isLoggedIn={isLoggedIn}
+                    element={Movies}
+                      foundMovies={oneMoreMoviesList}
+                      onSearchMovies={handleSearchMovies}
+                      onMovieSave={handleMovieSave}
+                      onMovieSavedDelete={handleMovieSavedDelete}
+                      filterState={moviesFilterState}
+                      searchQueryState={searchQueryStateMovies}
+                      message={moviesMessage}
+                      isMore={isMoreMoviesButtonActive}
+                      onMore={handleMoreMovies}
+                  /> </>}
+                />
 
-              <Route path='/saved-movies' element={
-                <ProtectedRoute
-                  isLoggedIn={isLoggedIn}
-                  element={SavedMovies}
-                    moviesList={
-                      searchQueryStateSavedMovies !== ''
-                      ? foundSavedMoviesList : moviesSavedList}
-                    onSearchMovies={handleSearchSavedMovies}
-                    onMovieSavedDelete={handleMovieSavedDelete}
-                    filterState={savedMoviesFilterState}
-                    searchQueryState={searchQueryStateSavedMovies}
-                    message={savedMoviesMessage}
-                />}
-              />
+                <Route path='/saved-movies' element={
+                  <ProtectedRoute
+                    isLoggedIn={isLoggedIn}
+                    element={SavedMovies}
+                      moviesList={
+                        searchQueryStateSavedMovies !== ''
+                        ? foundSavedMoviesList : moviesSavedList}
+                      onSearchMovies={handleSearchSavedMovies}
+                      onMovieSavedDelete={handleMovieSavedDelete}
+                      filterState={savedMoviesFilterState}
+                      searchQueryState={searchQueryStateSavedMovies}
+                      message={savedMoviesMessage}
+                  />}
+                />
 
-              <Route path='/profile' element={
-                <ProtectedRoute
-                  isLoggedIn={isLoggedIn}
-                  element={Profile}
-                    onUpdateUser={handleUpdateUserInfo}
-                    onLogOut={handleLogOut}
-                    apiResponse={apiResponse}
-                />}
-              />
+                <Route path='/profile' element={
+                  <ProtectedRoute
+                    isLoggedIn={isLoggedIn}
+                    element={Profile}
+                      onUpdateUser={handleUpdateUserInfo}
+                      onLogOut={handleLogOut}
+                      apiResponse={apiResponse}
+                  />}
+                />
 
-              <Route path='/signup'
-                element={isLoggedIn
-                ? <Navigate to="/movies" replace />
-                :  <Register
-                    onRegister={handleRegister}
-                    message={apiResponse.resMessage}
-                  /> }
-              />
-              <Route path='/signin'
-                element={isLoggedIn
+                <Route path='/signup'
+                  element={isLoggedIn
                   ? <Navigate to="/movies" replace />
-                  : <Login
-                      onLogIn={handleLogIn}
+                  :  <Register
+                      onRegister={handleRegister}
                       message={apiResponse.resMessage}
                     /> }
-              />
+                />
+                <Route path='/signin'
+                  element={isLoggedIn
+                    ? <Navigate to="/movies" replace />
+                    : <Login
+                        onLogIn={handleLogIn}
+                        message={apiResponse.resMessage}
+                      /> }
+                />
 
-              <Route path="/*" element={
-                <>
-                  <Navigate to="/404" replace={true} />
-                  <NotFoundPage className='not-found-page_place_page' />
-                </> }
-              />
-            </Routes>
+                <Route path="/*" element={
+                  <>
+                    <Navigate to="/404" replace={true} />
+                    <NotFoundPage className='not-found-page_place_page' />
+                  </> }
+                />
+              </Routes>
+            </div>
+            {( window.location.pathname !== '/signin' &&
+                window.location.pathname !== '/signup' &&
+                window.location.pathname !== '/profile' &&
+                window.location.pathname !== '/404' ) &&
+                <Footer footerMod='footer_place_page'/> }
           </div>
-           {( window.location.pathname !== '/signin' &&
-              window.location.pathname !== '/signup' &&
-              window.location.pathname !== '/profile' &&
-              window.location.pathname !== '/404' ) &&
-              <Footer footerMod='footer_place_page'/> }
-        </div>
-      </IsLoadingContext.Provider>
-    </CurrentUserContext.Provider>
+        </IsLoadingContext.Provider>
+      </CurrentUserContext.Provider>
 
       <PopupMenuNav
         isOpen={isMenuNavOpen}
         onClose={closeAllPopups}
+      />
+
+      <PopupResult
+        isOpen={(popupResultImage !== '') && isPopupResultOpen}
+        onClose={closeAllPopups}
+        res={apiResponse}
+        image={popupResultImage}
       />
     </>
   );

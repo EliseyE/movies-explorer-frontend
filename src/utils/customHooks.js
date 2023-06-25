@@ -20,8 +20,9 @@ const useValidInput = (initialValue, validations, adjust) => {
     setDirty(true);
   };
 
-  function onBlur() {
+  function onBlur(e) {
     setIsBlured(true);
+    setValidationBrowserMessage(e.target.validationMessage);
   };
 
   useEffect(() => {

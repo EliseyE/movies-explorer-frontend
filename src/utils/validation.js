@@ -36,7 +36,7 @@ const useValidation = (value , validations) => {
           break;
       };
     }
-  }, [value, isEmail.isValid, isPassword.isValid, isName.isValid]);
+  }, [value]);
 
   useEffect(() => {
     setIsValidCustom(!isEmail.isValid && !isPassword.isValid && !isName.isValid)
