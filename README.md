@@ -11,9 +11,9 @@
 
 Backend https://api.mexp.nomoredomains.rocks
 
-[Репозиторий frontend части дипломной проектной](https://github.com/EliseyE/movies-explorer-frontend "Репозиторий frontend части дипломной проектной")
-
 Frontend https://mexp.nomoredomains.rocks
+
+[Пул реквест frontend части дипломной проектной](https://github.com/EliseyE/movies-explorer-frontend/pull/2 "Пул реквест frontend части дипломной проектной")
 
 #
 
