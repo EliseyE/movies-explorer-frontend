@@ -395,8 +395,6 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
   const changeOneMoreButtonProterties = function() {
     const windowWidth = window.innerWidth;
 
-    console.log(MOVIES_GRID_LARGE.breakPoint);
-
     if(windowWidth >= MOVIES_GRID_LARGE.breakPoint)
       setOneMoreMoviesProterties(
         {...oneMoreMoviesProterties,
@@ -418,7 +416,6 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
           addQuantity: MOVIES_GRID_SMALL.addQuantity,
         });
   };
-
 
   // MORE MOVIES BUTTON ACTION
   function handleMoreMovies() {

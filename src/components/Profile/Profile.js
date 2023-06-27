@@ -16,8 +16,9 @@ function Profile({
   const currentUser = useContext(CurrentUserContext);
   const isLoading = useContext(IsLoadingContext);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const [isValuesSame, setIsValuesSame] = useState(false);
   const [isRequest, setIsRequest] = useState(false);
+  const [isInputsValid, setIsInputsValid] = useState(false);
 
   const name = useValidInput('', {isName: true}, {isNotEmpty: true});
   const email = useValidInput('', {isEmail: true}, {isNotEmpty: true});
@@ -55,8 +56,15 @@ function Profile({
   }, [isLoading]);
 
   useEffect(() => {
-    setIsButtonDisabled(!(email.isValid && name.isValid))
-}, [email.isValid, name.isValid]);
+    setIsInputsValid(email.isValid && name.isValid);
+    console.log('InputsValid', email.isValid, name.isValid);
+    console.log('setIsInputsValid', email.isValid && name.isValid);
+  }, [email.isValid, name.isValid]);
+
+  useEffect(() => {
+    setIsValuesSame(((currentUser.name === name.value) && (currentUser.email === email.value)) ? true : false);
+
+  }, [email.value, name.value, isEditMode]);
 
   return(
     <section className='profile'>
@@ -69,7 +77,7 @@ function Profile({
         titleMod='profile__title'
         messageMod='profile__message'
         buttonText={isLoading ? 'Сохранение...' : 'Сохранить' }
-        buttonIsDisabled={isButtonDisabled || isLoading}
+        buttonIsDisabled={isValuesSame || !isInputsValid || isLoading}
         isLoading={isLoading}
       >
         <InputsInternal>
