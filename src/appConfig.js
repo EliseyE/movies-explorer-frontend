@@ -18,7 +18,7 @@ const NAVIGATION_ITEMS_POPUP_MENU = [
 ];
 
 // PROPERTY FOR SEARCHING
-const PROPERTIES_FOR_SEARCHNG_ARRAY = ['country', 'description', 'nameEN', 'nameRU', 'year'];
+const PROPERTIES_FOR_SEARCHNG_ARRAY = ['nameRU'];
 
 // API
 const MOVIES_EXPLORER_BASE_URL_API  = 'http://localhost:3001';
