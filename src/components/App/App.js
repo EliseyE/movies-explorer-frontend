@@ -48,7 +48,8 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
-  const [apiResponse, setApiResponse] = useState({ resOk: false, resStatus: '' , resMessage: '' });
+  const [apiResponse, setApiResponse] = useState({ resOk: false, resStatus: '' , resMessage: ''  });
+  const [isResizeMode, setIsResizeMode] = useState(false);
 
   const navigate = useNavigate();
 
@@ -77,7 +78,8 @@ function App() {
   const [popupResultImage, setPopupResultImage] = useState('');
   const [isMoreMoviesButtonActive, setIsMoreMoviesButtonActive] = useState(false);
   const [oneMoreMoviesList, setOneMoreMoviesList] = useState([]);
-  const [oneMoreMoviesProterties, setOneMoreMoviesProterties] = useState({ maxInitial: 12, addQuantity: 3, breakPoint: 1216, counter: 0 });
+  const [oneMoreMoviesProterties, setOneMoreMoviesProterties] = useState({ maxInitial: 12, addQuantity: 3, breakPoint: 1216 });
+  const [moreMoviesCounter, setMoreMoviesCounter] = useState(0);
 
 
 // UI FUNCTIONS
@@ -156,6 +158,7 @@ function toggleMarkMovieAsSaved(movie) {
 // SEARCHING OF MOVIES
 async function handleSearchMovies(searchQuery, filterValue) {
   setFoundMoviesList([]);
+  setOneMoreMoviesList([]);
   let movies = [];
   setIsLoading(true);
   try {
@@ -179,6 +182,12 @@ async function handleSearchMovies(searchQuery, filterValue) {
     setFoundMoviesList(foundMovies);
 
     if(foundMovies.length === 0) setMoviesMessage('Ничего не найдено');
+    else {
+      changeOneMoreButtonProterties();
+      setIsResizeMode(true);
+      // window.addEventListener('resize', changeWindowWidthCallback);
+    }
+
     setIsLoading(false);
 };
 
@@ -381,22 +390,24 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
   };
 
 // ONE MORE MOVIES
-  function changeOneMoreButtonProterties() {
+  const changeOneMoreButtonProterties = function() {
     const windowWidth = window.innerWidth;
 
     if(windowWidth >= 1216)
-      setOneMoreMoviesProterties( {...oneMoreMoviesProterties, maxInitial: 12, addQuantity: 3, breakPoint: 1216 } );
+      setOneMoreMoviesProterties(
+        {...oneMoreMoviesProterties, maxInitial: 12, addQuantity: 3, breakPoint: 1216 });
 
     if((windowWidth < 1216) && (windowWidth > 686))
-      setOneMoreMoviesProterties( {...oneMoreMoviesProterties, maxInitial: 8, addQuantity: 2, breakPoint: 1216 } );
+      setOneMoreMoviesProterties(
+        {...oneMoreMoviesProterties, maxInitial: 8, addQuantity: 2, breakPoint: 1216 });
 
     if(windowWidth <= 686)
-      setOneMoreMoviesProterties( {...oneMoreMoviesProterties, maxInitial: 5, addQuantity: 2, breakPoint: 686 } );
-  }
+      setOneMoreMoviesProterties(
+        {...oneMoreMoviesProterties, maxInitial: 5, addQuantity: 2, breakPoint: 686 });
+  };
 
-  const changeWindowWidthCallback = debounce(changeOneMoreButtonProterties, 100);
 
-  // MORE MOVIES ACTION
+  // MORE MOVIES BUTTON ACTION
   function handleMoreMovies() {
     const listLength = foundMoviesList.length;
     const oneMoreMoviesListLength = oneMoreMoviesList.length;
@@ -407,44 +418,63 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
     if(delta <= oneMoreMoviesProterties.addQuantity) {
       setOneMoreMoviesList([...list]);
       setIsMoreMoviesButtonActive(false);
+      setMoreMoviesCounter(moreMoviesCounter + delta);
+      setIsResizeMode(false);
     };
 
-    if(delta > oneMoreMoviesProterties.addQuantity)
+    if(delta > oneMoreMoviesProterties.addQuantity) {
       setOneMoreMoviesList([...list.slice(0 , oneMoreMoviesListLength + oneMoreMoviesProterties.addQuantity )]);
+      setMoreMoviesCounter(moreMoviesCounter + oneMoreMoviesProterties.addQuantity);
+    };
   };
 
   useEffect(() => {
     const listLength = foundMoviesList.length;
     const oneMoreMoviesListLength = oneMoreMoviesList.length;
 
-    // IS BUTTON MORE EXIST
-    if( (oneMoreMoviesListLength < listLength ) &&
+  // UPDATING ONEMOREMOVIES LIST
+    const list = [...foundMoviesList];
+
+    // RESET TO BLANK
+    if ( listLength === 0 ) {
+      setOneMoreMoviesList([]);
+    };
+
+    // ADD INITIAL PORTION
+    if ( (oneMoreMoviesListLength === 0) && ( listLength !== 0 ) ) {
+      setOneMoreMoviesList([...list.slice(0 , oneMoreMoviesProterties.maxInitial )]);
+      setMoreMoviesCounter(oneMoreMoviesProterties.maxInitial);
+    };
+
+    // UPDATE LIST WHEN SAVE/DELETE SAVED
+    if ( (oneMoreMoviesListLength > 0) && ( listLength !== 0 ) )
+      setOneMoreMoviesList([...list.slice(0 , oneMoreMoviesListLength )]);
+
+  // IS BUTTON MORE EXIST
+    if ( (oneMoreMoviesListLength < listLength ) &&
         (listLength > oneMoreMoviesProterties.maxInitial) )
       setIsMoreMoviesButtonActive(true);
     else setIsMoreMoviesButtonActive(false);
 
-    if(oneMoreMoviesListLength === listLength)
-      setIsMoreMoviesButtonActive(false);
-
-    //
-    const list = [...foundMoviesList];
-
-    if( listLength === 0 ) {
-      setOneMoreMoviesList([]);
-    };
-
-    // INITIAL PART
-    if( (oneMoreMoviesListLength === 0) && ( listLength !==0 ) ) {
-      setOneMoreMoviesList([...list.slice(0 , oneMoreMoviesProterties.maxInitial )]);
-    };
-
-    // UPDATE LIST WHEN SAVE/DELETE SAVED
-    if( (oneMoreMoviesListLength > 0) && ( listLength !==0 ) )
-      setOneMoreMoviesList([...list.slice(0 , oneMoreMoviesListLength )]);
+    if (oneMoreMoviesListLength === listLength) setIsMoreMoviesButtonActive(false);
 
   }, [foundMoviesList, oneMoreMoviesProterties]);
 
-  window.addEventListener("resize", changeWindowWidthCallback, false);
+  useEffect(() => {
+    function handleResize() {
+      changeOneMoreButtonProterties();
+      if ((foundMoviesList.length === moreMoviesCounter) && (moreMoviesCounter !== 0) ) {
+          window.removeEventListener('resize', changeWindowWidthCallback);
+          setMoreMoviesCounter(0);
+      };
+    };
+    const changeWindowWidthCallback = debounce(handleResize, 500);
+
+    if (isResizeMode) {
+      window.addEventListener('resize', changeWindowWidthCallback);
+      return () => window.removeEventListener('resize', changeWindowWidthCallback);
+    }
+  }, [moreMoviesCounter, foundMoviesList, isResizeMode]);
 
   // LOADING SPINNER
   if(isInitialLoading)
