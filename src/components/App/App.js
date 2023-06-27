@@ -365,8 +365,9 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
   setIsLoading(true);
     try {
       const res = await mainApi.updateUserInfo(userData);
-      setCurrentUser({ ...currentUser, ...res.resData });
+      setCurrentUser({ ...currentUser, ...res.resData.user });
       handleUpdateLastResponse(res);
+      handleOpenPopupResult(res.resValues.ok);
     } catch (err) {
       if (!err.resValues.ok && (err.resValues.status !== 409))
         setApiResponse({
