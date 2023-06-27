@@ -303,8 +303,6 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
     } catch (err) {
       console.log(err);
       handleUpdateLastResponse(err);
-    } finally {
-      setIsLoading(false);
     }
   };
 

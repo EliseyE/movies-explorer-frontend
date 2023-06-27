@@ -70,7 +70,7 @@ function Profile({
         titleMod='profile__title'
         messageMod='profile__message'
         buttonText={isLoading ? 'Сохранение...' : 'Сохранить' }
-        buttonIsDisabled={isButtonDisabled}
+        buttonIsDisabled={isButtonDisabled || isLoading}
 
       >
         <InputsInternal>
@@ -88,7 +88,7 @@ function Profile({
               value={name.value || ''}
               onChange={name.onChange}
               onBlur={name.onBlur}
-              disabled={!isEditMode}
+              disabled={!isEditMode || isLoading}
             />
             <span className={`inputs-internal__input-error user-email-error ${name.isHighlighted && 'inputs-internal__input-error_highlighted'}`}>
               {name.validationMessage}
@@ -108,7 +108,7 @@ function Profile({
               value={email.value || ''}
               onChange={email.onChange}
               onBlur={email.onBlur}
-              disabled={!isEditMode}
+              disabled={!isEditMode || isLoading}
             />
             <span className={`inputs-internal__input-error user-email-error ${email.isHighlighted && 'inputs-internal__input-error_highlighted'}`}>
               {email.validationMessage}

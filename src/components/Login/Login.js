@@ -40,7 +40,7 @@ function Login({ onLogIn, message='' }) {
           message={isRequest && message}
           formMod='edit-form__place_login'
           buttonText={isLoading ? 'Вход...' : 'Войти'}
-          buttonIsDisabled={isButtonDisabled}
+          buttonIsDisabled={isButtonDisabled || isLoading}
         >
           <InputsRegular>
             <label className="inputs-regular__input-label" >
@@ -56,6 +56,7 @@ function Login({ onLogIn, message='' }) {
                 maxLength="30"
                 onChange={email.onChange}
                 onBlur={email.onBlur}
+                disabled={isLoading}
               />
               <span className={`inputs-regular__input-error user-email-error ${email.isHighlighted && 'inputs-regular__input-error_highlighted'}`}>
                 {email.validationMessage}
@@ -74,6 +75,7 @@ function Login({ onLogIn, message='' }) {
                 maxLength="30"
                 onChange={password.onChange}
                 onBlur={password.onBlur}
+                disabled={isLoading}
               />
               <span className={`inputs-regular__input-error user-password-error ${password.isHighlighted && 'inputs-regular__input-error_highlighted'}`}>
                 {password.validationMessage}
