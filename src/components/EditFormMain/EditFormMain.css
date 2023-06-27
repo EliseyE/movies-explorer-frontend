@@ -41,6 +41,15 @@
   margin-top: 3px;
 }
 
+.edit-form__preloader-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .05);
+}
+
 @media screen and (max-width: 540px) {
   .edit-form-main__title {
     margin-bottom: 80px;

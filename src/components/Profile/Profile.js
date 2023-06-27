@@ -6,7 +6,6 @@ import ButtonText from '../ButtonText/ButtonText';
 import ButtonTextRed from '../ButtonTextRed/ButtonTextRed';
 import InputsInternal from '../InputsInternal/InputsInternal'
 import { IsLoadingContext } from '../../contexts/IsLoadingContext';
-import Preloader from '../Preloader/Preloader';
 import { useValidInput } from '../../utils/customHooks';
 
 function Profile({
@@ -71,7 +70,7 @@ function Profile({
         messageMod='profile__message'
         buttonText={isLoading ? 'Сохранение...' : 'Сохранить' }
         buttonIsDisabled={isButtonDisabled || isLoading}
-
+        isLoading={isLoading}
       >
         <InputsInternal>
           <label className="inputs-internal__input-label">
@@ -130,7 +129,6 @@ function Profile({
               />
           </div>}
       </EditFormMain>
-      {isLoading && <div className='profile__preloader-container'><Preloader /></div> }
     </section>
   );
 }

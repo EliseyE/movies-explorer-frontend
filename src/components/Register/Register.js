@@ -45,6 +45,7 @@ function Register({ onRegister, message='' }) {
           formMod='edit-form__place_register'
           buttonText={isLoading ? 'Создание аккаунта...' : 'Зарегистрироваться'}
           buttonIsDisabled={isButtonDisabled || isLoading}
+          isLoading={isLoading}
         >
           <InputsRegular>
             <label className="inputs-regular__input-label">

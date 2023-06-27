@@ -41,6 +41,7 @@ function Login({ onLogIn, message='' }) {
           formMod='edit-form__place_login'
           buttonText={isLoading ? 'Вход...' : 'Войти'}
           buttonIsDisabled={isButtonDisabled || isLoading}
+          isLoading={isLoading}
         >
           <InputsRegular>
             <label className="inputs-regular__input-label" >
