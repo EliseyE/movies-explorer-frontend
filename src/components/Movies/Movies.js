@@ -39,6 +39,7 @@ function Movies({
           filterState={filter}
           searchQueryState={searchQueryState}
           formMod='search-form__place_movies'
+          isLoading={isLoading}
         />
         {!isLoading
           ? <>

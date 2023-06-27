@@ -6,7 +6,8 @@ function ButtonBlueEllipse({
   buttonMod ='',
   buttonType='',
   onClick=undefined,
-  text
+  text,
+  isDisabled
 }) {
 
   return(
@@ -15,6 +16,7 @@ function ButtonBlueEllipse({
       buttonType={buttonType}
       onClick={onClick}
       text={text}
+      isDisabled={isDisabled}
     />
   );
 }

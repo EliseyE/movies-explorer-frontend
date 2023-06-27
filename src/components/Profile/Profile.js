@@ -57,8 +57,6 @@ function Profile({
 
   useEffect(() => {
     setIsInputsValid(email.isValid && name.isValid);
-    console.log('InputsValid', email.isValid, name.isValid);
-    console.log('setIsInputsValid', email.isValid && name.isValid);
   }, [email.isValid, name.isValid]);
 
   useEffect(() => {

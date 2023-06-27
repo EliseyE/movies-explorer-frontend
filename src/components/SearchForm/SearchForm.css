@@ -25,6 +25,10 @@
   width: calc(100%*(850/1140));
 }
 
+.search-form__input-label {
+  position: relative;
+}
+
 .search-form__input {
   border: 0;
   padding: 0;
@@ -79,6 +83,21 @@
 .search-form__search-button {
   margin: 3px 30px 3px 28px;
   border-right: 1px #E8E8E8 solid;
+}
+
+.search-form__input-error {
+  width: 100%;
+  padding: 0;
+  margin: 3px 0 0 0;
+  min-height: 16px;
+  font-size: 12px;
+  line-height: 12px;
+  color: #ff0062;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: absolute;
+  bottom: -100%;
+  left: 0;
 }
 
 @media screen and (max-width: 860px) {

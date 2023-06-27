@@ -5,6 +5,7 @@ const useValidation = (value , validations) => {
   const [isEmail, setIsEmail] = useState({ isValid: false, message: '' });
   const [isPassword, setIsPassword] = useState({ isValid: false, message: '' });
   const [isName, setIsName] = useState({ isValid: false, message: '' });
+  const [isAnySymbol, setIsAnySymbol] = useState({ isValid: false, message: '' });
   const [errorMessage, setErrorMessage] = useState('');
 
 
@@ -32,6 +33,13 @@ const useValidation = (value , validations) => {
           : setIsName({...isName , isValid: true, message: 'Введены недопустимые символы ' });
           break;
 
+          case 'isAnySymbol':
+          const regExpAnySymbol = /^[a-zA-Zа-яА-ЯёЁ]{1,30}$/;
+          regExpAnySymbol.test(String(value).toLowerCase())
+          ? setIsAnySymbol({...isAnySymbol , isValid: false, message: ''})
+          : setIsAnySymbol({...isAnySymbol , isValid: true, message: 'Нужно ввести ключевое слово ' });
+          break;
+
         default:
           break;
       };
@@ -39,9 +47,9 @@ const useValidation = (value , validations) => {
   }, [value]);
 
   useEffect(() => {
-    setIsValidCustom(!isEmail.isValid && !isPassword.isValid && !isName.isValid)
-    setErrorMessage(`${isEmail.message}${isPassword.message}${isName.message}`)
-  }, [value, isEmail, isPassword, isName]);
+    setIsValidCustom(!isEmail.isValid && !isPassword.isValid && !isName.isValid && !isAnySymbol.isValid)
+    setErrorMessage(`${isEmail.message}${isPassword.message}${isName.message}${isAnySymbol.message}`)
+  }, [value, isEmail, isPassword, isName, isAnySymbol]);
 
   return {
     isValidCustom,
