@@ -10,6 +10,10 @@ import imageFail from '../../images/icons/image-fail.svg';
 import {
   BEATFILM_MOVIES_BASE_URL_API,
   PROPERTIES_FOR_SEARCHNG_ARRAY,
+  SHORT_MOVIES_DURATION,
+  MOVIES_GRID_LARGE,
+  MOVIES_GRID_MEDIUM,
+  MOVIES_GRID_SMALL,
 } from '../../appConfig';
 
 // UTILS
@@ -62,12 +66,12 @@ function App() {
 
 // SEARCH
   const [foundMoviesList, setFoundMoviesList] = useState([]);
-  const [moviesFilterState, setMoviesFilterState] = useState({ shortMovieDuration: 40 });
+  const [moviesFilterState, setMoviesFilterState] = useState({ shortMovieDuration: SHORT_MOVIES_DURATION });
   const [searchQueryStateMovies, setSearchQueryStateMovies] = useState('');
   const [moviesMessage, setMoviesMessage] = useState('');
 
   const [foundSavedMoviesList, setFoundSavedMoviesList] = useState([]);
-  const [savedMoviesFilterState, setSavedMoviesFilterState] = useState({ shortMovieDuration: 40 });
+  const [savedMoviesFilterState, setSavedMoviesFilterState] = useState({ shortMovieDuration: SHORT_MOVIES_DURATION });
   const [searchQueryStateSavedMovies, setSearchQueryStateSavedMovies] = useState('');
   const [savedMoviesMessage, setSavedMoviesMessage] = useState('');
 
@@ -78,7 +82,8 @@ function App() {
   const [popupResultImage, setPopupResultImage] = useState('');
   const [isMoreMoviesButtonActive, setIsMoreMoviesButtonActive] = useState(false);
   const [oneMoreMoviesList, setOneMoreMoviesList] = useState([]);
-  const [oneMoreMoviesProterties, setOneMoreMoviesProterties] = useState({ maxInitial: 12, addQuantity: 3, breakPoint: 1216 });
+  const [oneMoreMoviesProterties, setOneMoreMoviesProterties] = useState({
+    maxInitial: MOVIES_GRID_LARGE.maxInitial, addQuantity: MOVIES_GRID_LARGE.addQuantity });
   const [moreMoviesCounter, setMoreMoviesCounter] = useState(0);
 
 
@@ -102,10 +107,8 @@ function App() {
   function handleOpenPopupResult(resOk) {
     setIsPopupOpen(true);
     setPopupResultImage(resOk ? imageSuccess : imageFail );
-    setTimeout(() => {
-      setIsPopupResultOpen(true);
-     }, 200);
-  }
+    setIsPopupResultOpen(true);
+  };
 
   // CLICK ESC TO CLOSE POPUP
   useEffect(() => {
@@ -185,7 +188,6 @@ async function handleSearchMovies(searchQuery, filterValue) {
     else {
       changeOneMoreButtonProterties();
       setIsResizeMode(true);
-      // window.addEventListener('resize', changeWindowWidthCallback);
     }
 
     setIsLoading(false);
@@ -393,17 +395,28 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
   const changeOneMoreButtonProterties = function() {
     const windowWidth = window.innerWidth;
 
-    if(windowWidth >= 1216)
-      setOneMoreMoviesProterties(
-        {...oneMoreMoviesProterties, maxInitial: 12, addQuantity: 3, breakPoint: 1216 });
+    console.log(MOVIES_GRID_LARGE.breakPoint);
 
-    if((windowWidth < 1216) && (windowWidth > 686))
+    if(windowWidth >= MOVIES_GRID_LARGE.breakPoint)
       setOneMoreMoviesProterties(
-        {...oneMoreMoviesProterties, maxInitial: 8, addQuantity: 2, breakPoint: 1216 });
+        {...oneMoreMoviesProterties,
+          maxInitial: MOVIES_GRID_LARGE.maxInitial,
+          addQuantity: MOVIES_GRID_LARGE.addQuantity,
+        });
 
-    if(windowWidth <= 686)
+    if((windowWidth < MOVIES_GRID_LARGE.breakPoint) && (windowWidth > MOVIES_GRID_MEDIUM.breakPoint))
       setOneMoreMoviesProterties(
-        {...oneMoreMoviesProterties, maxInitial: 5, addQuantity: 2, breakPoint: 686 });
+        {...oneMoreMoviesProterties,
+          maxInitial: MOVIES_GRID_MEDIUM.maxInitial,
+          addQuantity: MOVIES_GRID_MEDIUM.addQuantity,
+        });
+
+    if(windowWidth <= MOVIES_GRID_SMALL.breakPoint)
+      setOneMoreMoviesProterties(
+        {...oneMoreMoviesProterties,
+          maxInitial: MOVIES_GRID_SMALL.maxInitial,
+          addQuantity: MOVIES_GRID_SMALL.addQuantity,
+        });
   };
 
 
@@ -468,7 +481,7 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
           setMoreMoviesCounter(0);
       };
     };
-    const changeWindowWidthCallback = debounce(handleResize, 500);
+    const changeWindowWidthCallback = debounce(handleResize, 300);
 
     if (isResizeMode) {
       window.addEventListener('resize', changeWindowWidthCallback);

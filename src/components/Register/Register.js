@@ -44,7 +44,7 @@ function Register({ onRegister, message='' }) {
           message={isRequest && message}
           formMod='edit-form__place_register'
           buttonText={isLoading ? 'Создание аккаунта...' : 'Зарегистрироваться'}
-          buttonIsDisabled={isButtonDisabled}
+          buttonIsDisabled={isButtonDisabled || isLoading}
         >
           <InputsRegular>
             <label className="inputs-regular__input-label">
@@ -60,6 +60,7 @@ function Register({ onRegister, message='' }) {
                 maxLength="30"
                 onChange={name.onChange}
                 onBlur={name.onBlur}
+                disabled={isLoading}
               />
               <span className={`inputs-regular__input-error user-email-error ${name.isHighlighted && 'inputs-regular__input-error_highlighted'}`}>
                 {name.validationMessage}
@@ -78,6 +79,7 @@ function Register({ onRegister, message='' }) {
                 maxLength="30"
                 onChange={email.onChange}
                 onBlur={email.onBlur}
+                disabled={isLoading}
               />
                 <span className={`inputs-regular__input-error user-email-error ${email.isHighlighted && 'inputs-regular__input-error_highlighted'}`}>
                  {email.validationMessage}
@@ -96,6 +98,7 @@ function Register({ onRegister, message='' }) {
                   maxLength="30"
                   onChange={password.onChange}
                   onBlur={password.onBlur}
+                  disabled={isLoading}
                 />
                 <span className={`inputs-regular__input-error user-password-error ${password.isHighlighted && 'inputs-regular__input-error_highlighted'}`}>
                   {password.validationMessage}
