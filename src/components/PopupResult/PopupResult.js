@@ -2,7 +2,7 @@ import React from "react";
 import './PopupResult.css';
 import Popup from "../Popup/Popup";
 
-function PopupResult({isOpen, onClose, res={resMessage: 'Информация'} , image}) {
+function PopupResult({isOpen, onClose, message='Информация' , image}) {
 
   return(
     <Popup name={'popup-result'} isOpen={isOpen} onClose={onClose}>
@@ -13,7 +13,7 @@ function PopupResult({isOpen, onClose, res={resMessage: 'Информация'} 
           className="popup-result__image popup-result__image_size_normal"
         />
         <h1 className="popup-result__message">
-          {res.resMessage}
+          {message}
         </h1>
       </div>
     </Popup>

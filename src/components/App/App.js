@@ -80,6 +80,7 @@ function App() {
   const [isMenuNavOpen, setIsMenuNavOpen] = useState(false);
   const [isPopupResultOpen, setIsPopupResultOpen] = useState(false);
   const [popupResultImage, setPopupResultImage] = useState('');
+  const [popupResultMessage, setPopupResultMessage] = useState('');
   const [isMoreMoviesButtonActive, setIsMoreMoviesButtonActive] = useState(false);
   const [oneMoreMoviesList, setOneMoreMoviesList] = useState([]);
   const [oneMoreMoviesProterties, setOneMoreMoviesProterties] = useState({
@@ -102,11 +103,13 @@ function App() {
     setTimeout(() => {
      setPopupResultImage('');
     }, 200);
+    setPopupResultMessage('');
   };
 
-  function handleOpenPopupResult(resOk) {
+  function handleOpenPopupResult(res) {
     setIsPopupOpen(true);
-    setPopupResultImage(resOk ? imageSuccess : imageFail );
+    setPopupResultImage(res.resOk ? imageSuccess : imageFail );
+    setPopupResultMessage(res.resMessage);
     setIsPopupResultOpen(true);
   };
 
@@ -240,9 +243,13 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
     setIsLoading(true);
     try {
       const res = await mainApi.register(regData);
-      navigate('/signin', { replace: true });
+      handleOpenPopupResult({resOk: res.resValues.ok, resMessage: res.resData.message});
       handleUpdateLastResponse(res);
-      handleOpenPopupResult(res.resValues.ok);
+      await handleLogIn({
+        email: regData.email,
+        password: regData.password,
+      });
+      navigate('/movies', { replace: true });
     } catch (err) {
       console.log(err);
       if (!err.resValues.ok && (err.resValues.status !== 409)) {
@@ -289,7 +296,6 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
   // AUTHORIZE
   const handleAuthorize = useCallback( async () => {
     await tokenCheck();
-    navigate('/movies', {replace: true});
     setIsLoading(false);
   }, []);
 
@@ -298,8 +304,12 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
       setIsLoading(true);
     try {
       const res = await mainApi.authorize(logInData);
-      if(res.resData) handleAuthorize();
-      handleUpdateLastResponse(res);
+      if(res.resData) {
+        await handleAuthorize();
+        navigate('/movies', {replace: true});
+      }
+        handleUpdateLastResponse(res);
+
     } catch (err) {
       console.log(err);
       handleUpdateLastResponse(err);
@@ -367,7 +377,7 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
       const res = await mainApi.updateUserInfo(userData);
       setCurrentUser({ ...currentUser, ...res.resData.user });
       handleUpdateLastResponse(res);
-      handleOpenPopupResult(res.resValues.ok);
+      handleOpenPopupResult(res.resValues);
     } catch (err) {
       if (!err.resValues.ok && (err.resValues.status !== 409))
         setApiResponse({
@@ -593,8 +603,8 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
       <PopupResult
         isOpen={(popupResultImage !== '') && isPopupResultOpen}
         onClose={closeAllPopups}
-        res={apiResponse}
         image={popupResultImage}
+        message={popupResultMessage}
       />
     </>
   );
