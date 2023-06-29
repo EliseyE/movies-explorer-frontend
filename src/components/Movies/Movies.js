@@ -1,45 +1,65 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import './Movies.css';
 import SearchForm from '../SearchForm/SearchForm';
 import Preloader from '../Preloader/Preloader';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import ButtonGrey from '../ButtonGrey/ButtonGrey';
+import { IsLoadingContext } from '../../contexts/IsLoadingContext';
 
-function Movies({ cardList, onMovieSave, onMovieSavedDelete, onMoreClick }) {
-  const [isLoading, setIsLoading] = useState(false);
-  const [moviesFilterState, setIsMoviesFilterState] = useState({});
+function Movies({
+    foundMovies,
+    onMovieSave,
+    onMovieSavedDelete,
+    onMore,
+    isMore,
+    onSearchMovies,
+    filterState,
+    searchQueryState,
+    message,
+    onUpdateFilter,
+  }) {
 
+  const isLoading = useContext(IsLoadingContext);
 
   function handleSetSearchFilter(moviesFilterNewState) {
-    setIsMoviesFilterState({...moviesFilterState, ...moviesFilterNewState});
+    onUpdateFilter(moviesFilterNewState);
   };
 
-  function handleSearchMovies(searchQuery) {
-    console.log(searchQuery);
+  async function handleSearchMovies(searchQuery) {
+    await onSearchMovies(searchQuery);
   };
-
-  useEffect(() => {
-    console.log(moviesFilterState);
-  }, [moviesFilterState]);
 
   return(
-    <section className='movies'>
-      <SearchForm
-        name='movies'
-        placeholder='Фильм'
-        setSearchFilter={handleSetSearchFilter}
-        searchMovies={handleSearchMovies}
-        formMod='search-form__place_movies'
-      />
-      <MoviesCardList
-        cardList={cardList}
-        onMovieSave={onMovieSave}
-        onMovieSavedDelete={onMovieSavedDelete}
-        moviesCardListMod='movies-card-list_place_movies'
-      />
-      <ButtonGrey text='Ещё' buttonMod='button-grey__place_movies' onClick={onMoreClick} />
-      {isLoading && <Preloader preloaderWheelMod='preloader__wheel_place_movies' /> }
-    </section>
+      <section className='movies'>
+        <SearchForm
+          name='movies'
+          placeholder='Фильм'
+          setSearchFilter={handleSetSearchFilter}
+          searchMovies={handleSearchMovies}
+          filterState={filterState}
+          searchQueryState={searchQueryState}
+          formMod='search-form__place_movies'
+          isLoading={isLoading}
+        />
+        {!isLoading
+          ? <>
+            {
+              (foundMovies.length === 0 && searchQueryState) &&
+              <span className='movies__message'>{message}</span>
+            }
+            { (foundMovies.length > 0) &&
+              <MoviesCardList
+                moviesList={foundMovies}
+                onMovieSave={onMovieSave}
+                onMovieSavedDelete={onMovieSavedDelete}
+                moviesCardListMod='movies-card-list_place_movies'
+              />
+            }
+            { isMore && <ButtonGrey text='Ещё' buttonMod='button-grey__place_movies' onClick={onMore} /> }
+            </>
+
+          : <div className='movies__preloader-container'><Preloader /></div> }
+      </section>
   );
 }
 export default Movies;

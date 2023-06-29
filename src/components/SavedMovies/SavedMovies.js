@@ -5,23 +5,30 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Preloader from '../Preloader/Preloader';
 
 
-function SavedMovies({ onMovieSavedDelete, cardList }) {
+function SavedMovies({
+  onMovieSavedDelete,
+  moviesList,
+  onSearchMovies,
+  message='Ничего не найдено',
+  onUpdateFilter,
+  onInitSavedMovies
+  }) {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const [moviesFilterState, setIsMoviesFilterState] = useState({});
-
   function handleSetSearchFilter(moviesFilterNewState) {
-    setIsMoviesFilterState({...moviesFilterState, ...moviesFilterNewState});
+    onUpdateFilter(moviesFilterNewState);
   };
 
   function handleSearchMovies(searchQuery) {
-    console.log(searchQuery);
+    setIsLoading(true);
+    onSearchMovies(searchQuery);
+    setIsLoading(false);
   };
 
   useEffect(() => {
-    console.log(moviesFilterState);
-  }, [moviesFilterState]);
+    onInitSavedMovies();
+  }, []);
 
   return(
     <section className='saved-movies'>
@@ -32,12 +39,22 @@ function SavedMovies({ onMovieSavedDelete, cardList }) {
         searchMovies={handleSearchMovies}
         formMod='search-form__place_saved-movies'
       />
-      <MoviesCardList
-        cardList={cardList}
-        moviesCardTypeSaved={true}
-        onMovieSavedDelete={onMovieSavedDelete}
-        moviesCardListMod='movies-card-list_place_saved-movies'
-      />
+      {!isLoading &&
+      <>
+        {
+          (moviesList.length === 0) &&
+          <span className='saved-movies__message'>{message}</span>
+        }
+        { (moviesList.length > 0) &&
+        <MoviesCardList
+          moviesList={moviesList}
+          moviesCardTypeSaved={true}
+          onMovieSavedDelete={onMovieSavedDelete}
+          moviesCardListMod='movies-card-list_place_saved-movies'
+        />
+        }
+      </>
+      }
       {isLoading && <Preloader preloaderWheelMod='preloader__wheel_place_saved-movies' /> }
     </section>
   );

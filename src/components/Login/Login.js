@@ -1,25 +1,30 @@
-import React, { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react';
 import './Login.css';
 import HelloPage from '../HelloPage/HelloPage';
 import EditFormMain from '../EditFormMain/EditFormMain';
 import InputsRegular from '../InputsRegular/InputsRegular';
-
-function Login({ onLogIn, message='Что-то пошло не так...' }) {
-
-  const navigate = useNavigate();
+import { IsLoadingContext } from '../../contexts/IsLoadingContext';
+import { useValidInput } from '../../utils/customHooks';
 
 
-  const [isEmailValid, setIsEmailValid] = useState(true);
-  const [isPasswordValid, setIsPasswordValid] = useState(false);
+function Login({ onLogIn, message='' }) {
 
-  const email = useRef();
-  const password = useRef();
+  const isLoading = useContext(IsLoadingContext);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const [isRequest, setIsRequest] = useState(false);
 
-  function handleSubmit(e) {
+  const email = useValidInput('', {isEmail: true}, {});
+  const password = useValidInput('', {isPassword: true}, {});
+
+  async function handleSubmit(e) {
     e.preventDefault();
-    onLogIn({ password: password.current.value, email: email.current.value });
+    await onLogIn({ password: password.value, email: email.value });
+    setIsRequest(true);
   };
+
+  useEffect(() => {
+      setIsButtonDisabled(!(email.isValid && password.isValid))
+  }, [email.isValid, password.isValid]);
 
   return(
     <section className='login'>
@@ -32,15 +37,17 @@ function Login({ onLogIn, message='Что-то пошло не так...' }) {
           title='Рады видеть!'
           name='login'
           onSubmit={handleSubmit}
-          message={message}
+          message={isRequest && message}
           formMod='edit-form__place_login'
-          buttonText='Войти'
+          buttonText={isLoading ? 'Вход...' : 'Войти'}
+          buttonIsDisabled={isButtonDisabled || isLoading}
+          isLoading={isLoading}
         >
           <InputsRegular>
             <label className="inputs-regular__input-label" >
               <span className='inputs-regular__input-name' >E-mail</span>
               <input
-                className={`inputs-regular__input profile__input_kind_user-email ${!isEmailValid && 'inputs-regular__input_invalid'}`}
+                className={`inputs-regular__input profile__input_kind_user-email ${email.isHighlighted && 'inputs-regular__input_invalid'}`}
                 placeholder=""
                 type="email"
                 name="user-email"
@@ -48,23 +55,33 @@ function Login({ onLogIn, message='Что-то пошло не так...' }) {
                 required
                 minLength="5"
                 maxLength="30"
-                ref={email}
+                onChange={email.onChange}
+                onBlur={email.onBlur}
+                disabled={isLoading}
               />
-              </label>
-              <label className="inputs-regular__input-label">
-                <span className='inputs-regular__input-name' >Пароль</span>
-                <input
-                  className={`inputs-regular__input profile__input_kind_user-password ${!isPasswordValid && 'inputs-regular__input_invalid'}`}
-                  placeholder=""
-                  type="password"
-                  name="password"
-                  id="password"
-                  required
-                  minLength="4"
-                  maxLength="30"
-                ref={password}
-                />
-              </label>
+              <span className={`inputs-regular__input-error user-email-error ${email.isHighlighted && 'inputs-regular__input-error_highlighted'}`}>
+                {email.validationMessage}
+              </span>
+            </label>
+            <label className="inputs-regular__input-label">
+              <span className='inputs-regular__input-name' >Пароль</span>
+              <input
+                className={`inputs-regular__input profile__input_kind_user-password ${password.isHighlighted && 'inputs-regular__input_invalid'}`}
+                placeholder=""
+                type="password"
+                name="password"
+                id="password"
+                required
+                minLength="4"
+                maxLength="30"
+                onChange={password.onChange}
+                onBlur={password.onBlur}
+                disabled={isLoading}
+              />
+              <span className={`inputs-regular__input-error user-password-error ${password.isHighlighted && 'inputs-regular__input-error_highlighted'}`}>
+                {password.validationMessage}
+              </span>
+            </label>
           </InputsRegular>
         </EditFormMain>
       </HelloPage>

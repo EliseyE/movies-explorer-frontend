@@ -1,56 +1,68 @@
 import React, { useState, useEffect, useContext } from 'react';
 import './Profile.css';
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
-import { useNavigate } from 'react-router-dom';
 import EditFormMain from '../EditFormMain/EditFormMain';
 import ButtonText from '../ButtonText/ButtonText';
 import ButtonTextRed from '../ButtonTextRed/ButtonTextRed';
 import InputsInternal from '../InputsInternal/InputsInternal'
-
+import { IsLoadingContext } from '../../contexts/IsLoadingContext';
+import { useValidInput } from '../../utils/customHooks';
 
 function Profile({
   onUpdateUser,
   onLogOut,
-  message='При обновлении профиля произошла ошибка.' }) {
+  apiResponse={ resOk: false, resStatus: '' , resMessage: '' } }) {
 
   const currentUser = useContext(CurrentUserContext);
-  const navigate = useNavigate();
-
-  const [name, setName] = useState(currentUser.name);
-  const [email, setEmail] = useState(currentUser.email);
-
-  const [isValid, setIsValid] = useState(false);
+  const isLoading = useContext(IsLoadingContext);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [isValuesSame, setIsValuesSame] = useState(false);
+  const [isRequest, setIsRequest] = useState(false);
+  const [isInputsValid, setIsInputsValid] = useState(false);
+
+  const name = useValidInput('', {isName: true}, {isNotEmpty: true});
+  const email = useValidInput('', {isEmail: true}, {isNotEmpty: true});
 
   function handleEdit() {
     setIsEditMode(!isEditMode);
   };
 
-  function handleChageName(e) {
-    setName(e.target.value);
-  };
-
-  function handleChageEmail(e) {
-    setEmail(e.target.value);
-  };
-
   useEffect(() => {
-    setName(currentUser.name);
-    setEmail(currentUser.email);
-  }, [currentUser]);
+    name.setValue(currentUser.name);
+    email.setValue(currentUser.email);
+  }, [currentUser, isEditMode]);
 
   useEffect(() => {
     setIsEditMode(false);
   }, []);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    onUpdateUser({
-      name,
-      email
-    });
-    setIsEditMode(false);
+    if((currentUser.name !== name.value) || (currentUser.email !== email.value)) {
+      await onUpdateUser({
+        name: name.value,
+        email: email.value
+      });
+      setIsRequest(true);
+    } else setIsEditMode(false);
   };
+
+  useEffect(() => {
+    setIsRequest(false);
+  }, [isEditMode]);
+
+  useEffect(() => {
+    if(apiResponse.resOk && isRequest) setIsEditMode(false);
+  }, [isLoading]);
+
+  useEffect(() => {
+    setIsInputsValid(email.isValid && name.isValid);
+  }, [email.isValid, name.isValid]);
+
+  useEffect(() => {
+    setIsValuesSame(((currentUser.name === name.value) && (currentUser.email === email.value)) ? true : false);
+
+  }, [email.value, name.value, isEditMode]);
 
   return(
     <section className='profile'>
@@ -58,34 +70,39 @@ function Profile({
         title={`Привет, ${currentUser.name}!`}
         name='profile'
         onSubmit={handleSubmit}
-        message={message}
+        message={isRequest && apiResponse.resMessage}
         buttinIsHidden={isEditMode}
-        buttonIsDisabled={isValid}
         titleMod='profile__title'
         messageMod='profile__message'
-
+        buttonText={isLoading ? 'Сохранение...' : 'Сохранить' }
+        buttonIsDisabled={isValuesSame || !isInputsValid || isLoading}
+        isLoading={isLoading}
       >
         <InputsInternal>
           <label className="inputs-internal__input-label">
             <span className='inputs-internal__input-name' >Имя</span>
             <input
-              className="inputs-internal__input internal-inputs_kind_name"
+              className={`inputs-internal__input internal-inputs_kind_name ${name.isHighlighted && 'inputs-internal__input_invalid'}`}
               placeholder=""
               type="text"
               name="profile-name"
               id="profile-name"
               required
               minLength="2"
-              maxLength="40"
-              value={name || ''}
-              onChange={handleChageName}
-              disabled={!isEditMode}
+              maxLength="30"
+              value={name.value || ''}
+              onChange={name.onChange}
+              onBlur={name.onBlur}
+              disabled={!isEditMode || isLoading}
             />
+            <span className={`inputs-internal__input-error user-email-error ${name.isHighlighted && 'inputs-internal__input-error_highlighted'}`}>
+              {name.validationMessage}
+            </span>
           </label>
           <label className="inputs-internal__input-label" >
             <span className='inputs-internal__input-name' >E-mail</span>
             <input
-              className="inputs-internal__input internal-inputs_kind_user-email"
+              className={`inputs-internal__input internal-inputs_kind_user-email ${email.isHighlighted && 'inputs-internal__input_invalid'}`}
               placeholder=""
               type="email"
               name="user-email"
@@ -93,28 +110,30 @@ function Profile({
               required
               minLength="5"
               maxLength="30"
-              value={email || ''}
-              onChange={handleChageEmail}
-              disabled={!isEditMode}
+              value={email.value || ''}
+              onChange={email.onChange}
+              onBlur={email.onBlur}
+              disabled={!isEditMode || isLoading}
             />
+            <span className={`inputs-internal__input-error user-email-error ${email.isHighlighted && 'inputs-internal__input-error_highlighted'}`}>
+              {email.validationMessage}
+            </span>
           </label>
         </InputsInternal>
 
-        <div className='profile__actions-container'>
-          { !isEditMode &&
-            <>
-              <ButtonText
-                text='Редактировать'
-                onClick={handleEdit}
-                buttonMod='profile__button-text'
+        { !isEditMode && !isLoading &&
+          <div className='profile__actions-container'>
+            <ButtonText
+              text='Редактировать'
+              onClick={handleEdit}
+              buttonMod='profile__button-text'
+            />
+            <ButtonTextRed
+              text='Выйти из аккаунта'
+              onClick={onLogOut}
+              buttonMod='profile__button-text'
               />
-              <ButtonTextRed
-                text='Выйти из аккаунта'
-                onClick={onLogOut}
-                buttonMod='profile__button-text'
-                />
-            </>}
-        </div>
+          </div>}
       </EditFormMain>
     </section>
   );

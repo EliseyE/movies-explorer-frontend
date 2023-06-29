@@ -1,6 +1,7 @@
 import React from 'react';
 import './EditFormMain.css';
 import ButtonBlue from '../ButtonBlue/ButtonBlue'
+import Preloader from '../Preloader/Preloader';
 
 function EditFormMain({
   children,
@@ -14,19 +15,22 @@ function EditFormMain({
   messageMod='',
   buttonMod='',
   buttonText='Сохранить',
-  buttinIsHidden=true
+  buttinIsHidden=true,
+  isLoading
   }) {
 
   return(
+    <>
     <form
       onSubmit={onSubmit}
       className={`edit-form-main edit-form-main_type_${name} ${formMod}`}
       name={`edit-form-main_type_${name}`}
+      noValidate
     >
       <div className='edit-form-main__containder'>
       <h2 className={`edit-form-main__title ${titleMod}`}>{title}</h2>
         {children}
-      {buttinIsHidden &&<span className={`edit-form-main__message ${messageMod}`} >{message}</span>}
+      {buttinIsHidden && message && <span className={`edit-form-main__message ${messageMod}`} >{message}</span>}
       </div>
       {buttinIsHidden &&
         <ButtonBlue
@@ -36,6 +40,8 @@ function EditFormMain({
           isDisabled={buttonIsDisabled}
         /> }
     </form>
+    {isLoading && <div className='edit-form__preloader-container'><Preloader /></div> }
+    </>
   );
 }
 

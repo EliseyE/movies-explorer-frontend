@@ -42,7 +42,6 @@
 }
 
 .promo__image {
-  background-image: url('../../images/planet-web.svg');
   background-position: top;
   background-repeat: no-repeat;
   background-size: contain;

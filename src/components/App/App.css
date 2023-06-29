@@ -2,17 +2,33 @@
   max-width: 1280px;
   min-width: 320px;
   margin: 0 auto;
+  height: 100%;
+  display: grid;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "header"
+    "content"
+    "footer" ;
+  grid-template-rows: max-content auto max-content;
+}
+
+.page__content {
+  align-self: start;
+  grid-area: content;
 }
 
 .header_place_page {
   box-sizing: border-box;
   padding-left: 70px;
   padding-right: 70px;
+  grid-area: header;
 }
 
 .footer_place_page {
   margin-left: 70px;
   margin-right: 70px;
+  grid-area: footer;
+  align-self: end;
 }
 
 .not-found-page_place_page {

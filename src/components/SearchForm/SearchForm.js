@@ -1,24 +1,47 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import './SearchForm.css';
 import ToggleSwitch from '../ToggleSwitch/ToggleSwitch';
 import ButtonBlueEllipse from '../ButtonBlueEllipse/ButtonBlueEllipse';
 import { useState } from 'react';
+import { useValidation } from "../../utils/validation";
 
 import imagePath from '../../images/icons/lens-ico.svg'
 
-function SearchForm({ placeholder='', name='default', searchMovies, formMod='', sumbitButtonMod='', setSearchFilter }) {
+function SearchForm({
+  placeholder='',
+  name='default',
+  searchMovies,
+  formMod='',
+  sumbitButtonMod='',
+  setSearchFilter,
+  filterState={},
+  searchQueryState='',
+  message='',
+  isLoading
+  }) {
+    const [moviesFilterState, setIsMoviesFilterState] = useState(filterState);
+    const [isValidationMessageActive, setIsValidationMessageActive] = useState(false);
+    const [searchQuery, setSearchQuery] = useState(searchQueryState);
 
-  const searchQuery = useRef();
-
-  const [moviesFilterState, setIsMoviesFilterState] = useState({});
+    const valid = useValidation(searchQuery,  {isAnySymbol: true});
 
   function handleSubmit(e) {
     e.preventDefault();
-    if(searchQuery.current.value !== '') searchMovies(searchQuery.current.value);
+
+    if (valid.isValidCustom) searchMovies(searchQuery);
+    else setIsValidationMessageActive(true);
   };
 
   function handleToggleSwitch(isActive) {
     setIsMoviesFilterState({ ...moviesFilterState, shortMovies: isActive });
+  };
+
+  function handleFocus() {
+    setIsValidationMessageActive(false);
+  };
+
+  function handleSetSearchQuery(e) {
+    setSearchQuery(e.target.value)
   };
 
   useEffect(() => {
@@ -31,6 +54,7 @@ function SearchForm({ placeholder='', name='default', searchMovies, formMod='', 
       onSubmit={handleSubmit}
       className={`search-form search-form_type_${name} ${formMod}`}
       name={`search-form_type_${name}`}
+      noValidate={true}
     >
       <div className='search-form__conteiner'>
         <div
@@ -46,17 +70,25 @@ function SearchForm({ placeholder='', name='default', searchMovies, formMod='', 
               name="find-moveis"
               id="find-moveis"
               required
-              ref={searchQuery}
+              onChange={handleSetSearchQuery}
+              value={searchQuery || ''}
+              disabled={isLoading}
+              onFocus={handleFocus}
               />
-            <span className="search-form__input-error find-moveis-error"></span>
+            <span className="search-form__input-error search-moveis-error">{(!valid.isValidCustom && isValidationMessageActive) && valid.errorMessage}</span>
           </label>
         </fieldset>
-        <ButtonBlueEllipse text='Найти' buttonType='submit' buttonMod='search-form__search-button'/>
+        <ButtonBlueEllipse
+          text='Найти'
+          buttonType='submit'
+          buttonMod={`search-form__search-button ${sumbitButtonMod}`}
+          isDisabled={isLoading}
+        />
         <span className='search-form__line' />
       </div>
 
       <div className='search-form__filter'>
-          <ToggleSwitch name='Короткометражки' isDefaultState={false} onToggle={handleToggleSwitch} />
+          <ToggleSwitch name='Короткометражки' isDefaultState={moviesFilterState.shortMovies} onToggle={handleToggleSwitch} />
           <span className='search-form__filter-title' >Короткометражки</span>
       </div>
     </form>

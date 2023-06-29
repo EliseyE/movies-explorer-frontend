@@ -4,7 +4,6 @@
   align-items: center;
 
   padding-top: 74px;
-  padding-bottom: 70px;
 }
 
 .edit-form-main__title.profile__title {
@@ -31,6 +30,15 @@
   margin-top: 3px;
 }
 
+.profile__preloader-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .05);
+}
+
 @media screen and (max-width: 768px) {
   .profile {
     padding-top: 236px;
@@ -38,6 +46,7 @@
   }
 
   .profile__actions-container{
+    padding-top: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -52,6 +61,7 @@
   }
 
   .profile__actions-container{
+    padding-top: 35px;
     display: flex;
     flex-direction: column;
     align-items: center;

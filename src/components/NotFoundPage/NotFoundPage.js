@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './NotFoundPage.css';
 import {
   Link,
 } from 'react-router-dom';
 
 function NotFoundPage({ notFoundPageMod='' }) {
+
+  useEffect(() => {
+    console.log('Страница по указанному маршруту не найдена');
+  }, []);
 
   return(
     <section className={`not-found-page ${notFoundPageMod}`} >
