@@ -11,7 +11,7 @@ function SavedMovies({
   filterState,
   searchQueryState,
   onSearchMovies,
-  message,
+  message='Ничего не найдено',
   onUpdateFilter
   }) {
 
@@ -41,7 +41,7 @@ function SavedMovies({
       {!isLoading &&
       <>
         {
-          (moviesList.length === 0 && searchQueryState) &&
+          (moviesList.length === 0) &&
           <span className='saved-movies__message'>{message}</span>
         }
         { (moviesList.length > 0) &&
