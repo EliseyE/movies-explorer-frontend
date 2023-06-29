@@ -21,8 +21,8 @@ const NAVIGATION_ITEMS_POPUP_MENU = [
 const PROPERTIES_FOR_SEARCHNG_ARRAY = ['nameRU'];
 
 // API
-const MOVIES_EXPLORER_BASE_URL_API  = 'http://localhost:3001';
-// const MOVIES_EXPLORER_BASE_URL_API  = 'https://api.mexp.nomoredomains.rocks';
+// const MOVIES_EXPLORER_BASE_URL_API  = 'http://localhost:3001';
+const MOVIES_EXPLORER_BASE_URL_API  = 'https://api.mexp.nomoredomains.rocks';
 const BEATFILM_MOVIES_BASE_URL_API  = 'https://api.nomoreparties.co';
 
 const MOVIES_GRID_LARGE = {
