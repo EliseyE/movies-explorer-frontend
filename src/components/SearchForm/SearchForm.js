@@ -45,7 +45,6 @@ function SearchForm({
   };
 
   useEffect(() => {
-    console.log('filter', moviesFilterState.shortMovies)
     setSearchFilter(moviesFilterState);
   }, [moviesFilterState]);
 

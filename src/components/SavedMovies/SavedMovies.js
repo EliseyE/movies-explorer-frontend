@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './SavedMovies.css';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
@@ -8,11 +8,10 @@ import Preloader from '../Preloader/Preloader';
 function SavedMovies({
   onMovieSavedDelete,
   moviesList,
-  filterState,
-  searchQueryState,
   onSearchMovies,
   message='Ничего не найдено',
-  onUpdateFilter
+  onUpdateFilter,
+  onInitSavedMovies
   }) {
 
   const [isLoading, setIsLoading] = useState(false);
@@ -27,6 +26,10 @@ function SavedMovies({
     setIsLoading(false);
   };
 
+  useEffect(() => {
+    onInitSavedMovies();
+  }, []);
+
   return(
     <section className='saved-movies'>
       <SearchForm
@@ -35,8 +38,6 @@ function SavedMovies({
         setSearchFilter={handleSetSearchFilter}
         searchMovies={handleSearchMovies}
         formMod='search-form__place_saved-movies'
-        filterState={filterState}
-        searchQueryState={searchQueryState}
       />
       {!isLoading &&
       <>

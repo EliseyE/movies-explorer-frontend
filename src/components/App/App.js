@@ -78,6 +78,7 @@ function App() {
   const [savedMoviesFilterState, setSavedMoviesFilterState] = useState({});
   const [searchQueryStateSavedMovies, setSearchQueryStateSavedMovies] = useState('');
   const [savedMoviesMessage, setSavedMoviesMessage] = useState('');
+  const [isSearchSavedMoviesMode, setIsSearchSavedMoviesMode] = useState(false);
 
   // UI
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -117,6 +118,10 @@ function App() {
     setPopupResultImage(res.resOk ? imageSuccess : imageFail );
     setPopupResultMessage(res.resMessage);
     setIsPopupResultOpen(true);
+
+    console.log(res.resOk, res.resMessage);
+    console.log(res);
+
   };
 
   // CLICK ESC TO CLOSE POPUP
@@ -229,14 +234,15 @@ function handleUpdateMoviesFilter(filterNewState) {
 
 // SEARCHING OF SAVED MOVIES
 async function handleSearchSavedMovies(searchQuery) {
+  setIsSearchSavedMoviesMode(true);
   setSearchQueryStateSavedMovies(searchQuery);
   setFoundSavedMoviesList([]);
   setFoundFilteredSavedMoviesList([]);
   const keyWordsArray = getArrayKeyWords(searchQuery);
   let foundSavedMovies = searchInArrayByProperties(PROPERTIES_FOR_SEARCHNG_ARRAY, moviesSavedList, keyWordsArray);
+
   if(foundSavedMovies.length === 0) {
     setSavedMoviesMessage('Ничего не найдено');
-    setSearchQueryStateSavedMovies('');
     return;
   }
   setFoundSavedMoviesList(foundSavedMovies);
@@ -247,6 +253,11 @@ async function handleSearchSavedMovies(searchQuery) {
 
 // FILTERING SAVED MOVIES BY TOGGLE
 function handleUpdateSavedMoviesFilter(filterNewState) {
+  if( moviesFilterState.shortMovies !==  filterNewState.shortMovies )
+    setMoviesFilterState({...moviesFilterState, ...filterNewState});
+  else return;
+  setIsSearchSavedMoviesMode(true);
+
   let filter = {...savedMoviesFilterState, ...filterNewState};
   setSavedMoviesFilterState(filter);
 
@@ -256,8 +267,15 @@ function handleUpdateSavedMoviesFilter(filterNewState) {
     setSavedMoviesMessage(filteredSavedMovies.length === 0 ? 'Ничего не найдено' : '');
   }
 
-  handleFilterSavedMovies(foundSavedMoviesList);
+  handleFilterSavedMovies(searchQueryStateSavedMovies ? foundSavedMoviesList : moviesSavedList);
+  console.log('toggle');
+
 };
+
+function handleInitSavedMovies() {
+  setIsSearchSavedMoviesMode(false);
+  setSavedMoviesMessage('');
+}
 
 // LOCAL STORAGE
 useEffect(() => {
@@ -272,12 +290,7 @@ setIsResizeMode(getItemFromLocalstorageJson('isResizeMode') ?? false);
 
 
 // SAVED MOVIES FROM STORAGE
-setSearchQueryStateSavedMovies(getStringFromLocalstorage('searchQueryStateSavedMovies' ?? ''));
-setSavedMoviesMessage(getStringFromLocalstorage('savedMoviesMessage') ?? '');
-setSavedMoviesFilterState(getItemFromLocalstorageJson('savedMoviesFilterState') ?? {});
 setMoviesSavedList(getItemFromLocalstorageJson('moviesSavedList') ?? []);
-setFoundSavedMoviesList(getItemFromLocalstorageJson('foundSavedMoviesList') ?? []);
-setFoundFilteredSavedMoviesList(getItemFromLocalstorageJson('foundFilteredSavedMoviesList') ?? []);
 }, []);
 
 // MOVIES TO STORAGE
@@ -312,29 +325,8 @@ useEffect(() => {
 
 // SAVED MOVIES TO STORAGE
 useEffect(() => {
-  putStringIntoLocalstorage('searchQueryStateSavedMovies', searchQueryStateSavedMovies ?? '');
-}, [searchQueryStateSavedMovies]);
-
-useEffect(() => {
   putStringIntoLocalstorage('savedMoviesMessage', savedMoviesMessage ?? '');
 }, [savedMoviesMessage]);
-
-useEffect(() => {
-  putItemIntoLocalstorageJson('savedMoviesFilterState', savedMoviesFilterState ?? {});
-}, [savedMoviesFilterState]);
-
-useEffect(() => {
-  putItemIntoLocalstorageJson('moviesSavedList', moviesSavedList ?? []);
-}, [moviesSavedList]);
-
-useEffect(() => {
-  putItemIntoLocalstorageJson('foundSavedMoviesList', foundSavedMoviesList ?? []);
-}, [foundSavedMoviesList]);
-
-useEffect(() => {
-  putItemIntoLocalstorageJson('foundFilteredSavedMoviesList', foundFilteredSavedMoviesList ?? []);
-}, [foundFilteredSavedMoviesList]);
-
 
 
 // API
@@ -450,6 +442,19 @@ useEffect(() => {
       await mainApi.logout();
       setIsLoggedIn(false);
       setMoviesList([]);
+
+    // MOVIES FROM STORAGE
+    setSearchQueryStateMovies('');
+    setMoviesMessage('');
+    setMoviesFilterState({});
+    setFoundMoviesList([]);
+    setFoundFilteredMoviesList([]);
+    setOneMoreMoviesList([]);
+    setIsResizeMode(false);
+
+    // SAVED MOVIES FROM STORAGE
+    setMoviesSavedList([]);
+
       navigate('/', {replace: true});
     } catch(err) {
       console.log(err);
@@ -506,14 +511,16 @@ useEffect(() => {
       const res = await mainApi.updateUserInfo(userData);
       setCurrentUser({ ...currentUser, ...res.resData.user });
       handleUpdateLastResponse(res);
-      handleOpenPopupResult(res.resValues);
+      handleOpenPopupResult({resOk: res.resValues.ok, resMessage: res.resData.message});
     } catch (err) {
-      if (!err.resValues.ok && (err.resValues.status !== 409))
+      if (!err.resValues.ok && (err.resValues.status !== 409)) {
         setApiResponse({
           ...apiResponse,
           resOk: err.resValues.ok,
           resStatus: err.resValues.status,
           resMessage: 'При обновлении профиля произошла ошибка'});
+        handleOpenPopupResult({resOk: err.resValues.ok, resMessage: 'При обновлении профиля произошла ошибка'});
+      }
       else handleUpdateLastResponse(err);
     } finally {
       setIsLoading(false);
@@ -594,13 +601,11 @@ useEffect(() => {
     if ( (oneMoreMoviesListLength === 0) && ( listLength !== 0 ) ) {
       setOneMoreMoviesList([...list.slice(0 , oneMoreMoviesProterties.maxInitial )]);
       setMoreMoviesCounter(oneMoreMoviesProterties.maxInitial);
-      console.log('ADD INITIAL PORTION');
     };
 
     // UPDATE LIST WHEN SAVE/DELETE SAVED
     if ( (oneMoreMoviesListLength > 0) && ( listLength !== 0 ) ) {
       setOneMoreMoviesList([...list.slice(0 , oneMoreMoviesListLength )]);
-      console.log('UPDATE LIST WHEN SAVE/DELETE SAVED');
     }
 
   // IS BUTTON MORE EXIST
@@ -676,13 +681,16 @@ useEffect(() => {
                   <ProtectedRoute
                     isLoggedIn={isLoggedIn}
                     element={SavedMovies}
-                      moviesList={foundFilteredSavedMoviesList}
+                      moviesList={
+                        isSearchSavedMoviesMode
+                        ? foundFilteredSavedMoviesList
+                        : moviesSavedList
+                      }
                       onSearchMovies={handleSearchSavedMovies}
                       onMovieSavedDelete={handleMovieSavedDelete}
-                      filterState={savedMoviesFilterState}
-                      searchQueryState={searchQueryStateSavedMovies}
                       message={savedMoviesMessage}
                       onUpdateFilter={handleUpdateSavedMoviesFilter}
+                      onInitSavedMovies={handleInitSavedMovies}
                   />}
                 />
 
