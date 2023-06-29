@@ -34,7 +34,7 @@ const useValidation = (value , validations) => {
           break;
 
           case 'isAnySymbol':
-          const regExpAnySymbol = /^[a-zA-Zа-яА-ЯёЁ]{1,30}$/;
+          const regExpAnySymbol = /^[a-zA-Zа-яА-ЯёЁ]([ ]?[a-zA-Zа-яА-ЯёЁ0-9-\_\.\-]){0,29}$/;
           regExpAnySymbol.test(String(value).toLowerCase())
           ? setIsAnySymbol({...isAnySymbol , isValid: false, message: ''})
           : setIsAnySymbol({...isAnySymbol , isValid: true, message: 'Нужно ввести ключевое слово ' });

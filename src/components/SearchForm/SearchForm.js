@@ -27,9 +27,8 @@ function SearchForm({
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (valid.isValidCustom) {
-      searchMovies(searchQuery);
-      console.log(valid.isValidCustom, searchQuery); }
+
+    if (valid.isValidCustom) searchMovies(searchQuery);
     else setIsValidationMessageActive(true);
   };
 
@@ -46,6 +45,7 @@ function SearchForm({
   };
 
   useEffect(() => {
+    console.log('filter', moviesFilterState.shortMovies)
     setSearchFilter(moviesFilterState);
   }, [moviesFilterState]);
 
@@ -92,9 +92,6 @@ function SearchForm({
           <ToggleSwitch name='Короткометражки' isDefaultState={moviesFilterState.shortMovies} onToggle={handleToggleSwitch} />
           <span className='search-form__filter-title' >Короткометражки</span>
       </div>
-      {/* <span className={`search-form__message user-email-error ${email.isHighlighted && 'inputs-internal__input-error_highlighted'}`}>
-        {message}
-      </span> */}
     </form>
   );
 }

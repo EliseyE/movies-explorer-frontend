@@ -46,8 +46,35 @@ function debounce(callee, timeoutMs) {
   };
 };
 
+// LOCALSTORAGE FUNCTIONS
+  // PUT ITEM INTO LOCALSTORAGE AS JSON
+  function putItemIntoLocalstorageJson(arrayKeyItem, item) {
+    localStorage.setItem(`${arrayKeyItem}`, JSON.stringify(item));
+  };
+
+  // GET ITEM FROM LOCALSTORAGE JSON
+  function getItemFromLocalstorageJson(arrayKeyItem) {
+    const item = JSON.parse(localStorage.getItem(`${arrayKeyItem}`));
+    return item;
+  };
+
+  // PUT STRING INTO LOCALSTORAGE
+    function putStringIntoLocalstorage(key, string) {
+      localStorage.setItem(`${key}`, `${string}`);
+    };
+
+  // GET STRING FROM LOCALSTORAGE
+    function getStringFromLocalstorage(key) {
+      const string = localStorage.getItem(`${key}`);
+      return string;
+    };
+
 export {
   getArrayKeyWords,
   searchInArrayByProperties,
   debounce,
+  putItemIntoLocalstorageJson,
+  getItemFromLocalstorageJson,
+  putStringIntoLocalstorage,
+  getStringFromLocalstorage,
 };

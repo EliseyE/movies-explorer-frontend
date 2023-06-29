@@ -11,20 +11,19 @@ function SavedMovies({
   filterState,
   searchQueryState,
   onSearchMovies,
-  message
+  message,
+  onUpdateFilter
   }) {
 
   const [isLoading, setIsLoading] = useState(false);
-  const [filter, setFilter] = useState(filterState);
-
 
   function handleSetSearchFilter(moviesFilterNewState) {
-    setFilter(moviesFilterNewState);
+    onUpdateFilter(moviesFilterNewState);
   };
 
   function handleSearchMovies(searchQuery) {
     setIsLoading(true);
-    onSearchMovies(searchQuery, filter);
+    onSearchMovies(searchQuery);
     setIsLoading(false);
   };
 
@@ -36,7 +35,7 @@ function SavedMovies({
         setSearchFilter={handleSetSearchFilter}
         searchMovies={handleSearchMovies}
         formMod='search-form__place_saved-movies'
-        filterState={filter}
+        filterState={filterState}
         searchQueryState={searchQueryState}
       />
       {!isLoading &&

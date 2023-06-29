@@ -21,6 +21,10 @@ import {
   getArrayKeyWords,
   searchInArrayByProperties,
   debounce,
+  putItemIntoLocalstorageJson,
+  getItemFromLocalstorageJson,
+  putStringIntoLocalstorage,
+  getStringFromLocalstorage,
 } from '../../utils/utils'
 
 // API
@@ -66,12 +70,14 @@ function App() {
 
 // SEARCH
   const [foundMoviesList, setFoundMoviesList] = useState([]);
-  const [moviesFilterState, setMoviesFilterState] = useState({ shortMovieDuration: SHORT_MOVIES_DURATION });
+  const [foundFilteredMoviesList, setFoundFilteredMoviesList] = useState([]);
+  const [moviesFilterState, setMoviesFilterState] = useState({});
   const [searchQueryStateMovies, setSearchQueryStateMovies] = useState('');
   const [moviesMessage, setMoviesMessage] = useState('');
 
   const [foundSavedMoviesList, setFoundSavedMoviesList] = useState([]);
-  const [savedMoviesFilterState, setSavedMoviesFilterState] = useState({ shortMovieDuration: SHORT_MOVIES_DURATION });
+  const [foundFilteredSavedMoviesList, setFoundFilteredSavedMoviesList] = useState([]);
+  const [savedMoviesFilterState, setSavedMoviesFilterState] = useState({});
   const [searchQueryStateSavedMovies, setSearchQueryStateSavedMovies] = useState('');
   const [savedMoviesMessage, setSavedMoviesMessage] = useState('');
 
@@ -122,7 +128,7 @@ function App() {
       }
     };
 
-    if(isPopupOpen)
+    if (isPopupOpen)
     document.addEventListener('keydown', handleEscapeKey);
     return () => document.removeEventListener('keydown', handleEscapeKey);
   }, [isPopupOpen]);
@@ -130,8 +136,8 @@ function App() {
 
 // FILTER MOVIES
 function filterMovies(moviesListArray, filterValue) {
-  if(filterValue.shortMovies)
-    return moviesListArray.filter(movie => movie.duration < filterValue.shortMovieDuration);
+  if (filterValue.shortMovies)
+    return moviesListArray.filter(movie => movie.duration < SHORT_MOVIES_DURATION);
   return moviesListArray;
 };
 
@@ -139,7 +145,7 @@ function filterMovies(moviesListArray, filterValue) {
 function markMoviesAsSaved(moveis) {
   return moveis.map(movie => {
     const savedMovie = moviesSavedList.find(savedMovieItem => savedMovieItem.movieId === movie.movieId);
-    if(savedMovie)
+    if (savedMovie)
       return {...movie, _id: savedMovie._id };
     return movie;
   });
@@ -147,23 +153,29 @@ function markMoviesAsSaved(moveis) {
 
 // TOGGLE MARK MOVIE SAVED\NOT_SAVED
 function toggleMarkMovieAsSaved(movie) {
-  if(foundMoviesList.length > 0) {
+  if (foundMoviesList.length > 0) {
     let movies = [...foundMoviesList];
     const movieIndex = movies.findIndex(
       foundMovie => foundMovie.movieId === movie.movieId);
-    if(movies[movieIndex]._id === undefined) {
+    if (movies[movieIndex]._id === undefined) {
       movies[movieIndex] = {...movies[movieIndex], _id: movie._id };
       setFoundMoviesList(movies);
+      const filteredMovies = filterMovies(movies, moviesFilterState);
+      setFoundFilteredMoviesList(filteredMovies);
       return;
     }
+
     movies[movieIndex] = { ...movies[movieIndex], _id: undefined };
     setFoundMoviesList(movies);
+    const filteredMovies = filterMovies(movies, moviesFilterState);
+    setFoundFilteredMoviesList(filteredMovies);
   }
 };
 
 // SEARCHING OF MOVIES
-async function handleSearchMovies(searchQuery, filterValue) {
+async function handleSearchMovies(searchQuery) {
   setFoundMoviesList([]);
+  setFoundFilteredMoviesList([]);
   setOneMoreMoviesList([]);
   let movies = [];
   setIsLoading(true);
@@ -179,36 +191,75 @@ async function handleSearchMovies(searchQuery, filterValue) {
   }
     const keyWordsArray = getArrayKeyWords(searchQuery);
     let foundMovies = searchInArrayByProperties(PROPERTIES_FOR_SEARCHNG_ARRAY, movies, keyWordsArray);
+    console.log('foundMovies:', foundMovies);
 
-    foundMovies = filterMovies(foundMovies, filterValue);
-    foundMovies = markMoviesAsSaved(foundMovies);
-
-    setMoviesFilterState({...moviesFilterState, ...filterValue});
-    setSearchQueryStateMovies(searchQuery);
-    setFoundMoviesList(foundMovies);
-
-    if(foundMovies.length === 0) setMoviesMessage('Ничего не найдено');
-    else {
+    if(foundMovies.length === 0) {
+      setMoviesMessage('Ничего не найдено');
+      setIsLoading(false);
+      return;
+    } else {
       changeOneMoreButtonProterties();
       setIsResizeMode(true);
-    }
 
-    setIsLoading(false);
+      foundMovies = markMoviesAsSaved(foundMovies);
+      setFoundMoviesList(foundMovies);
+      const foundFilteredMovies = filterMovies(foundMovies, moviesFilterState);
+      setFoundFilteredMoviesList(foundFilteredMovies);
+
+      setSearchQueryStateMovies(searchQuery);
+      console.log(foundMovies);
+      setIsLoading(false);
+    }
+};
+
+// FILTERING MOVIES BY TOGGLE
+function handleUpdateMoviesFilter(filterNewState) {
+  if( moviesFilterState.shortMovies !==  filterNewState.shortMovies )
+    setMoviesFilterState({...moviesFilterState, ...filterNewState});
+  else return;
+
+  setIsLoading(true);
+  if  (foundMoviesList.length > 0) {
+    setOneMoreMoviesList([]);
+    const filteredMovies = filterMovies(foundMoviesList, {...moviesFilterState, ...filterNewState});
+    setFoundFilteredMoviesList(filteredMovies);
+    setMoviesMessage(filteredMovies.length === 0 ? 'Ничего не найдено' : '');
+  };
+  setIsLoading(false);
+
 };
 
 // SEARCHING OF SAVED MOVIES
-async function handleSearchSavedMovies(searchQuery, filterValue) {
+async function handleSearchSavedMovies(searchQuery) {
   setFoundSavedMoviesList([]);
+  setFoundFilteredSavedMoviesList([]);
   const keyWordsArray = getArrayKeyWords(searchQuery);
   let foundSavedMovies = searchInArrayByProperties(PROPERTIES_FOR_SEARCHNG_ARRAY, moviesSavedList, keyWordsArray);
-
-  foundSavedMovies = filterMovies(foundSavedMovies, filterValue);
-
-  setSavedMoviesFilterState({...savedMoviesFilterState, ...filterValue});
-  setSearchQueryStateSavedMovies(searchQuery);
+  if(foundSavedMovies.length === 0) {
+    setSavedMoviesMessage('Ничего не найдено');
+    return;
+  }
   setFoundSavedMoviesList(foundSavedMovies);
 
-  if(foundSavedMovies.length === 0) setSavedMoviesMessage('Ничего не найдено');
+  const foundFilteredSavedMovies = filterMovies(foundSavedMovies, savedMoviesFilterState);
+  setFoundFilteredSavedMoviesList(foundFilteredSavedMovies);
+
+  setSearchQueryStateSavedMovies(searchQuery);
+};
+
+// FILTERING SAVED MOVIES BY TOGGLE
+function handleUpdateSavedMoviesFilter(filterNewState) {
+  let filter = {...savedMoviesFilterState, ...filterNewState};
+  setSavedMoviesFilterState(filter);
+
+  function handleFilterSavedMovies(list) {
+    const filteredSavedMovies = filterMovies(list, filter);
+    setFoundFilteredSavedMoviesList(filteredSavedMovies);
+    setSavedMoviesMessage(filteredSavedMovies.length === 0 ? 'Ничего не найдено' : '');
+  }
+
+  handleFilterSavedMovies(foundSavedMoviesList.length === 0 ? moviesSavedList : foundSavedMoviesList);
+
 };
 
 // API
@@ -364,6 +415,9 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
       const updatedFoundSavedMoviesList = deleteMovieFromList(movie, foundSavedMoviesList);
       setFoundSavedMoviesList(updatedFoundSavedMoviesList);
 
+      const updatedFoundFilteredSavedMoviesList = deleteMovieFromList(movie, foundFilteredSavedMoviesList);
+      setFoundFilteredSavedMoviesList(updatedFoundFilteredSavedMoviesList);
+
       toggleMarkMovieAsSaved(movie);
     } catch (err) {
       console.log(err);
@@ -429,9 +483,9 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
 
   // MORE MOVIES BUTTON ACTION
   function handleMoreMovies() {
-    const listLength = foundMoviesList.length;
+    const listLength = foundFilteredMoviesList.length;
     const oneMoreMoviesListLength = oneMoreMoviesList.length;
-    const list = [...foundMoviesList];
+    const list = [...foundFilteredMoviesList];
 
     const delta = listLength - oneMoreMoviesListLength;
 
@@ -448,12 +502,13 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
     };
   };
 
+// ONE MORE MOVIES RESIZING
   useEffect(() => {
-    const listLength = foundMoviesList.length;
+    const listLength = foundFilteredMoviesList.length;
     const oneMoreMoviesListLength = oneMoreMoviesList.length;
 
   // UPDATING ONEMOREMOVIES LIST
-    const list = [...foundMoviesList];
+    const list = [...foundFilteredMoviesList];
 
     // RESET TO BLANK
     if ( listLength === 0 ) {
@@ -464,11 +519,14 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
     if ( (oneMoreMoviesListLength === 0) && ( listLength !== 0 ) ) {
       setOneMoreMoviesList([...list.slice(0 , oneMoreMoviesProterties.maxInitial )]);
       setMoreMoviesCounter(oneMoreMoviesProterties.maxInitial);
+      console.log('ADD INITIAL PORTION');
     };
 
     // UPDATE LIST WHEN SAVE/DELETE SAVED
-    if ( (oneMoreMoviesListLength > 0) && ( listLength !== 0 ) )
+    if ( (oneMoreMoviesListLength > 0) && ( listLength !== 0 ) ) {
       setOneMoreMoviesList([...list.slice(0 , oneMoreMoviesListLength )]);
+      console.log('UPDATE LIST WHEN SAVE/DELETE SAVED');
+    }
 
   // IS BUTTON MORE EXIST
     if ( (oneMoreMoviesListLength < listLength ) &&
@@ -478,12 +536,12 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
 
     if (oneMoreMoviesListLength === listLength) setIsMoreMoviesButtonActive(false);
 
-  }, [foundMoviesList, oneMoreMoviesProterties]);
+  }, [foundFilteredMoviesList, oneMoreMoviesProterties]);
 
   useEffect(() => {
     function handleResize() {
       changeOneMoreButtonProterties();
-      if ((foundMoviesList.length === moreMoviesCounter) && (moreMoviesCounter !== 0) ) {
+      if ((foundFilteredMoviesList.length === moreMoviesCounter) && (moreMoviesCounter !== 0) ) {
           window.removeEventListener('resize', changeWindowWidthCallback);
           setMoreMoviesCounter(0);
       };
@@ -494,7 +552,9 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
       window.addEventListener('resize', changeWindowWidthCallback);
       return () => window.removeEventListener('resize', changeWindowWidthCallback);
     }
-  }, [moreMoviesCounter, foundMoviesList, isResizeMode]);
+  }, [moreMoviesCounter, foundFilteredMoviesList, isResizeMode]);
+
+
 
   // LOADING SPINNER
   if(isInitialLoading)
@@ -533,6 +593,7 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
                       message={moviesMessage}
                       isMore={isMoreMoviesButtonActive}
                       onMore={handleMoreMovies}
+                      onUpdateFilter={handleUpdateMoviesFilter}
                   /> </>}
                 />
 
@@ -541,13 +602,13 @@ async function handleSearchSavedMovies(searchQuery, filterValue) {
                     isLoggedIn={isLoggedIn}
                     element={SavedMovies}
                       moviesList={
-                        searchQueryStateSavedMovies !== ''
-                        ? foundSavedMoviesList : moviesSavedList}
+                        foundFilteredSavedMoviesList ? foundFilteredSavedMoviesList : moviesSavedList}
                       onSearchMovies={handleSearchSavedMovies}
                       onMovieSavedDelete={handleMovieSavedDelete}
                       filterState={savedMoviesFilterState}
                       searchQueryState={searchQueryStateSavedMovies}
                       message={savedMoviesMessage}
+                      onUpdateFilter={handleUpdateSavedMoviesFilter}
                   />}
                 />
 

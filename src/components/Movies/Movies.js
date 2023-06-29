@@ -15,18 +15,18 @@ function Movies({
     onSearchMovies,
     filterState,
     searchQueryState,
-    message
+    message,
+    onUpdateFilter,
   }) {
 
-  const [filter, setFilter] = useState(filterState);
   const isLoading = useContext(IsLoadingContext);
 
   function handleSetSearchFilter(moviesFilterNewState) {
-    setFilter(moviesFilterNewState);
+    onUpdateFilter(moviesFilterNewState);
   };
 
   async function handleSearchMovies(searchQuery) {
-    await onSearchMovies(searchQuery, filter);
+    await onSearchMovies(searchQuery);
   };
 
   return(
@@ -36,7 +36,7 @@ function Movies({
           placeholder='Фильм'
           setSearchFilter={handleSetSearchFilter}
           searchMovies={handleSearchMovies}
-          filterState={filter}
+          filterState={filterState}
           searchQueryState={searchQueryState}
           formMod='search-form__place_movies'
           isLoading={isLoading}
